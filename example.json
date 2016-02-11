@@ -1,8 +1,8 @@
 {
-  "_id":"c-105",
-  "_parentId":"b-55",
+  "_id":"c-05",
+  "_parentId":"b-05",
   "_type":"component",
-  "_component":"mcq",
+  "_component":"timedMcq",
   "_classes":"",
   "_layout":"left",
   "_attempts":1,
@@ -12,8 +12,8 @@
   "_selectable":1,
   "_canShowModelAnswer": true,
   "_recordInteraction":true,
-  "title": "MCQ",
-  "displayTitle": "MCQ",
+  "title": "timedMCQ",
+  "displayTitle": "timedMcq",
   "body": "Which of the following options would you consider to be correct?",
   "instruction": "",
   "_items": [
