@@ -1,7 +1,8 @@
 <div class="timedMcq-inner component-inner" role="region" aria-label="{{_globals._components._timedMcq.ariaRegion}}" {{#if _globals._components._timedMcq.ariaRegion}}tabindex="0"{{/if}}>
     {{> component this}}
-    <div class="timedMcq-widget component-widget {{#unless _isEnabled}} disabled {{#if _isInteractionComplete}} complete submitted show-user-answer {{#if _isCorrect}}correct{{/if}} {{/if}} {{/unless}}">
-{{!--     <div class="timer"> 10s </div> --}}
+        <button class="timedMcq-start" id="timedMcq-start">Reveal</button>
+        <div class="timedMcq-time" id="timedMcq-time">{{ _seconds }}</div>    
+    <div class="timedMcq-widget component-widget {{#unless _isEnabled}} disabled {{#if _isInteractionComplete}} complete submitted show-user-answer {{#if _isCorrect}}correct{{/if}} {{/if}} {{/unless}}" id="timedMcq-widget">
         {{#each _items}}
         <div class="timedMcq-item component-item component-item-color {{#unless ../_isEnabled}} {{#if _isCorrect}} correct{{else}} incorrect{{/if}} {{/unless}} item-{{@index}}">
             <input type="checkbox" id="{{../_id}}-{{@index}}" aria-labelledby="{{../_id}}-{{@index}}-aria"{{#unless ../_isEnabled}} disabled{{/unless}} aria-label="{{a11y_normalize text}}"/>
@@ -18,6 +19,6 @@
         </div>
         {{/each}}
     </div>
-    <div class="buttons">
+    <div class="buttons" id="buttons">
     </div>
 </div>

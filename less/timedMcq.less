@@ -4,6 +4,25 @@
         position:relative;
     }
 
+    .timedMcq-title, .timedMcq-body ,.timedMcq-instruction {
+        width: 70%;
+    }
+
+    .timedMcq-time {
+        position: absolute;
+        top: 10%;
+        left: 70%;
+        color: red;
+    }
+
+    .timedMcq-start {
+        position: absolute;
+        width: 96%;
+        height: 250px;
+        font-size: 36px;
+    }      
+
+
     .timedMcq-item label {
         color:@item-text-color;
         display:block;
@@ -111,7 +130,7 @@
 }
 
 .timedMcq-widget {
-
+    visibility: hidden;
     &.show-user-answer {
         .timedMcq-item-icon {
             display:none;
@@ -159,6 +178,10 @@
             color:@validation-error;
         }
     }
+}
+
+.buttons {
+    visibility: hidden;
 }
 
 .no-touch {

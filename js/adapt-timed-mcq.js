@@ -1,14 +1,15 @@
 define(function(require) {
     var QuestionView = require('coreViews/questionView');
     var Adapt = require('coreJS/adapt');
-
+    var timer;
     var timedMcq = QuestionView.extend({
 
         events: {
             'focus .timedMcq-item input':'onItemFocus',
             'blur .timedMcq-item input':'onItemBlur',
             'change .timedMcq-item input':'onItemSelected',
-            'keyup .timedMcq-item input':'onKeyPress'
+            'keyup .timedMcq-item input':'onKeyPress',
+            'click .timedMcq-start' : 'startTimer'
         },
 
         resetQuestionOnRevisit: function() {
@@ -27,6 +28,39 @@ define(function(require) {
             this.setupRandomisation();
             
             this.restoreUserAnswers();
+        },
+
+        startTimer: function() {
+            this.displayQuestions();
+            console.log(this.model.get('_seconds'));
+            parent = this;
+            timer = setInterval(function(){
+                parent.decreaseTime() } , 1000);
+        },
+
+        displayQuestions: function() {
+            document.getElementById("timedMcq-widget").style.visibility = 'visible';
+            document.getElementById("buttons").style.visibility = 'visible';
+            document.getElementById("timedMcq-start").style.display = 'none';            
+        },
+
+        checkTimeUp: function(){
+            if(this.model.get('_seconds') < 0) {
+                this.stopTimer();
+                this.disableQuestion();
+            }
+        },
+
+        stopTimer: function(){
+            console.log('time up!');
+            clearInterval(timer);
+        },
+
+        decreaseTime: function(){
+            var seconds = this.model.get("_seconds");
+            this.model.set("_seconds", seconds - 1);         
+            document.getElementById("timedMcq-time").innerHTML = seconds;
+            this.checkTimeUp();   
         },
 
         setupQuestionItemIndexes: function() {
