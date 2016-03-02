@@ -9,7 +9,7 @@ define(function(require) {
             'blur .timedMcq-item input':'onItemBlur',
             'change .timedMcq-item input':'onItemSelected',
             'keyup .timedMcq-item input':'onKeyPress',
-            'click .timedMcq-start' : 'startTimer'
+            'click .timedMcq-time-start' : 'startTimer'
         },
 
         resetQuestionOnRevisit: function() {

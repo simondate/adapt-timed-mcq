@@ -4,18 +4,24 @@
         position:relative;
     }
 
-    .timedMcq-title, .timedMcq-body ,.timedMcq-instruction {
+    .timedMcq-title, .timedMcq-body , .timedMcq-instruction {
         width: 70%;
+    }
+
+    .timedMcq-time-instruction {
+        padding-bottom: @item-padding-bottom;
     }
 
     .timedMcq-time {
         position: absolute;
         top: 10%;
         left: 70%;
-        color: red;
+        padding: 30px;
+        color: @item-text-color;
+        background-color: @item-color;
     }
 
-    .timedMcq-start {
+    .timedMcq-time-start {
         position: absolute;
         width: 96%;
         height: 250px;

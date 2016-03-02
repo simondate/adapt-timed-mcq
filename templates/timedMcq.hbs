@@ -1,7 +1,33 @@
-<div class="timedMcq-inner component-inner" role="region" aria-label="{{_globals._components._timedMcq.ariaRegion}}" {{#if _globals._components._timedMcq.ariaRegion}}tabindex="0"{{/if}}>
-    {{> component this}}
-        <button class="timedMcq-start" id="timedMcq-start">Reveal</button>
-        <div class="timedMcq-time" id="timedMcq-time">{{ _seconds }}</div>    
+<div class="timedMcq-inner component-inner" role="region" aria-label="{{_globals._components._timedMcq.ariaRegion}}" {{#if _globals._components._timedMcq.ariaRegion}}tabindex="0"{{/if}}> 
+
+        {{#if displayTitle}} {{!-- code copied from component.hbs --}}
+            <div class="{{_component}}-title component-title">
+                <div role="heading" tabindex="0" class="{{_component}}-title-inner component-title-inner"  aria-level="4">
+                    {{{displayTitle}}}
+                </div>
+            </div>
+        {{/if}}
+
+        <div class="timedMcq-time-instruction">{{ timeInstruction }}</div>
+        <button class="timedMcq-time-start" id="timedMcq-start">Reveal</button>
+
+        {{#if body}}
+            <div class="{{_component}}-body component-body">
+                <div class="{{_component}}-body-inner component-body-inner">
+                    {{{a11y_text body}}}
+                </div>
+            </div>
+        {{/if}}
+        {{#if instruction}}
+            <div class="{{_component}}-instruction component-instruction">
+                <div class="{{_component}}-instruction-inner component-instruction-inner">
+                    {{{a11y_text instruction}}}
+                </div>
+            </div>
+        {{/if}}
+
+        <div class="timedMcq-time" id="timedMcq-time">{{ _seconds }}</div>
+
     <div class="timedMcq-widget component-widget {{#unless _isEnabled}} disabled {{#if _isInteractionComplete}} complete submitted show-user-answer {{#if _isCorrect}}correct{{/if}} {{/if}} {{/unless}}" id="timedMcq-widget">
         {{#each _items}}
         <div class="timedMcq-item component-item component-item-color {{#unless ../_isEnabled}} {{#if _isCorrect}} correct{{else}} incorrect{{/if}} {{/unless}} item-{{@index}}">
