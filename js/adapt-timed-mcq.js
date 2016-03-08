@@ -34,14 +34,15 @@ define(function(require) {
             this.displayQuestions();
             console.log(this.model.get('_seconds'));
             parent = this;
-            timer = setInterval(function(){
-                parent.decreaseTime() } , 1000);
+            timer = setInterval(
+                    function(){ parent.decreaseTime() } , 1000
+                );
         },
 
         displayQuestions: function() {
-            document.getElementById("timedMcq-widget").style.visibility = 'visible';
-            document.getElementById("buttons").style.visibility = 'visible';
-            document.getElementById("timedMcq-start").style.display = 'none';            
+            $(".timedMcq-widget").css("visibility","visible");
+            $(".buttons").css("visibility","visible");
+            $(".timedMcq-time-start").addClass("disabled selected");            
         },
 
         checkTimeUp: function(){

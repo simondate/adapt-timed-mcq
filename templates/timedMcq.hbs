@@ -9,7 +9,7 @@
         {{/if}}
 
         <div class="timedMcq-time-instruction">{{ timeInstruction }}</div>
-        <button class="timedMcq-time-start" id="timedMcq-start">Reveal</button>
+        <button class="timedMcq-time-start">Reveal</button>
 
         {{#if body}}
             <div class="{{_component}}-body component-body">
@@ -26,9 +26,9 @@
             </div>
         {{/if}}
 
-        <div class="timedMcq-time" id="timedMcq-time">{{ _seconds }}</div>
+        <div class="timedMcq-time">{{ _seconds }}</div>
 
-    <div class="timedMcq-widget component-widget {{#unless _isEnabled}} disabled {{#if _isInteractionComplete}} complete submitted show-user-answer {{#if _isCorrect}}correct{{/if}} {{/if}} {{/unless}}" id="timedMcq-widget">
+    <div class="timedMcq-widget component-widget {{#unless _isEnabled}} disabled {{#if _isInteractionComplete}} complete submitted show-user-answer {{#if _isCorrect}}correct{{/if}} {{/if}} {{/unless}}">
         {{#each _items}}
         <div class="timedMcq-item component-item component-item-color {{#unless ../_isEnabled}} {{#if _isCorrect}} correct{{else}} incorrect{{/if}} {{/unless}} item-{{@index}}">
             <input type="checkbox" id="{{../_id}}-{{@index}}" aria-labelledby="{{../_id}}-{{@index}}-aria"{{#unless ../_isEnabled}} disabled{{/unless}} aria-label="{{a11y_normalize text}}"/>

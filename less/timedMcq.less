@@ -14,18 +14,29 @@
 
     .timedMcq-time {
         position: absolute;
-        top: 10%;
-        left: 70%;
+        top: 24%;
+        left: 90%;
         padding: 30px;
         color: @item-text-color;
         background-color: @item-color;
+        z-index: 5;
     }
 
     .timedMcq-time-start {
         position: absolute;
         width: 96%;
-        height: 250px;
+        height: 410px;
         font-size: 36px;
+        z-index: 10;
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 0.5s linear;
+
+        &.selected {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 0.5s, opacity 0.5s linear;
+        }
     }      
 
 
