@@ -60,7 +60,7 @@ define(function(require) {
         decreaseTime: function(){
             var seconds = this.model.get("_seconds");
             this.model.set("_seconds", seconds - 1);         
-            document.getElementById("timedMcq-time").innerHTML = seconds;
+            $(".timedMcq-time").text(seconds);
             this.checkTimeUp();   
         },
 
