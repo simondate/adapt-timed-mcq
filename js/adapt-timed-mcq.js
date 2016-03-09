@@ -42,7 +42,12 @@ define(function(require) {
         displayQuestions: function() {
             $(".timedMcq-widget").css("visibility","visible");
             $(".buttons").css("visibility","visible");
-            $(".timedMcq-time-start").addClass("disabled selected");            
+
+
+            $(".timedMcq-body-items").addClass("started");
+            $(".timedMcq-time-start").addClass("started").attr("disabled", true);
+            $(".timedMcq-time-instruction").addClass("started");
+            $(".timedMcq-time").addClass("started");
         },
 
         checkTimeUp: function(){

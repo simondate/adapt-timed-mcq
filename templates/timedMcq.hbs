@@ -11,20 +11,22 @@
         <div class="timedMcq-time-instruction">{{ timeInstruction }}</div>
         <button class="timedMcq-time-start">Reveal</button>
 
-        {{#if body}}
-            <div class="{{_component}}-body component-body">
-                <div class="{{_component}}-body-inner component-body-inner">
-                    {{{a11y_text body}}}
+        <div class="timedMcq-body-items">
+            {{#if body}}
+                <div class="{{_component}}-body component-body">
+                    <div class="{{_component}}-body-inner component-body-inner">
+                        {{{a11y_text body}}}
+                    </div>
                 </div>
-            </div>
-        {{/if}}
-        {{#if instruction}}
-            <div class="{{_component}}-instruction component-instruction">
-                <div class="{{_component}}-instruction-inner component-instruction-inner">
-                    {{{a11y_text instruction}}}
+            {{/if}}
+            {{#if instruction}}
+                <div class="{{_component}}-instruction component-instruction">
+                    <div class="{{_component}}-instruction-inner component-instruction-inner">
+                        {{{a11y_text instruction}}}
+                    </div>
                 </div>
-            </div>
-        {{/if}}
+            {{/if}}
+        </div>
 
         <div class="timedMcq-time">{{ _seconds }}</div>
 

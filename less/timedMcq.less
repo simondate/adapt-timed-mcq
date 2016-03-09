@@ -4,35 +4,60 @@
         position:relative;
     }
 
-    .timedMcq-title, .timedMcq-body , .timedMcq-instruction {
+    .timedMcq-title, .timedMcq-body , .timedMcq-instruction , .timedMcq-time-instruction{
         width: 70%;
     }
 
     .timedMcq-time-instruction {
-        padding-bottom: @item-padding-bottom;
+        opacity: 1;
+        transition: opacity 0.5s linear;
+        position: absolute;
+
+        &.started {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 0.5s, opacity 0.5s linear;
+        }
     }
 
     .timedMcq-time {
         position: absolute;
-        top: 24%;
+        top: 17%;
         left: 90%;
-        padding: 30px;
+        padding: 20px;
         color: @item-text-color;
         background-color: @item-color;
-        z-index: 5;
+        visibility: hidden;
+        &.started {
+            visibility: visible;
+            opacity: 1;
+            transition: visibility 0s 0.5s, opacity 0.5s linear;
+        }
+    }
+
+    .timedMcq-body-items {
+        visibility: hidden;
+        opacity: 0;
+        &.started {
+            visibility: visible;
+            opacity: 1;
+            transition: visibility 0s 0.5s, opacity 0.5s linear;
+        }
     }
 
     .timedMcq-time-start {
         position: absolute;
         width: 96%;
-        height: 410px;
+        height: 70%;
+        top: 25%;
         font-size: 36px;
         z-index: 10;
         visibility: visible;
         opacity: 1;
         transition: opacity 0.5s linear;
 
-        &.selected {
+        &.started {
+
             visibility: hidden;
             opacity: 0;
             transition: visibility 0s 0.5s, opacity 0.5s linear;
