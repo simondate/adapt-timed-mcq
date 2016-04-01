@@ -52,7 +52,6 @@ define(function(require) {
 
         checkTimeUp: function(){
             if(this.model.get('_seconds') < 0) {
-                this.stopTimer();
                 this.disableQuestion();
             }
         },
@@ -105,6 +104,7 @@ define(function(require) {
         },
 
         disableQuestion: function() {
+            this.stopTimer();  
             this.setAllItemsEnabled(false);
         },
 

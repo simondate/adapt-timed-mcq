@@ -4,7 +4,7 @@
         position:relative;
     }
 
-    .timedMcq-title, .timedMcq-body , .timedMcq-instruction , .timedMcq-time-instruction{
+    .timedMcq-title, .timedMcq-body , .timedMcq-instruction {
         width: 70%;
     }
 
@@ -12,6 +12,7 @@
         opacity: 1;
         transition: opacity 0.5s linear;
         position: absolute;
+        font-weight: 600;
 
         &.started {
             visibility: hidden;
@@ -23,7 +24,7 @@
     .timedMcq-time {
         position: absolute;
         top: 17%;
-        left: 90%;
+        left: 92.3%;
         padding: 20px;
         color: @item-text-color;
         background-color: @item-color;
@@ -57,7 +58,6 @@
         transition: opacity 0.5s linear;
 
         &.started {
-
             visibility: hidden;
             opacity: 0;
             transition: visibility 0s 0.5s, opacity 0.5s linear;
