@@ -32,7 +32,6 @@ define(function(require) {
 
         startTimer: function() {
             this.displayQuestions();
-            console.log(this.model.get('_seconds'));
             parent = this;
             timer = setInterval(
                     function(){ parent.decreaseTime() } , 1000
@@ -51,21 +50,23 @@ define(function(require) {
         },
 
         checkTimeUp: function(){
-            if(this.model.get('_seconds') < 0) {
-                this.disableQuestion();
+            if(this.model.get('_seconds') > 0) {
+                return false;
             }
+            return true;
         },
 
         stopTimer: function(){
-            console.log('time up!');
             clearInterval(timer);
         },
 
         decreaseTime: function(){
             var seconds = this.model.get("_seconds");
-            this.model.set("_seconds", seconds - 1);         
+            this.model.set("_seconds", --seconds);
             $(".timedMcq-time").text(seconds);
-            this.checkTimeUp();   
+            if(this.checkTimeUp()) {
+                this.disableQuestion();
+            }  
         },
 
         setupQuestionItemIndexes: function() {
@@ -104,7 +105,12 @@ define(function(require) {
         },
 
         disableQuestion: function() {
-            this.stopTimer();  
+            this.stopTimer();
+            if(this.checkTimeUp()){            
+                this.setupTimeUpFeedback();
+                this.model.set('_isCorrect', false);
+                Adapt.trigger('questionView:showFeedback', this);
+            }
             this.setAllItemsEnabled(false);
         },
 
@@ -269,7 +275,8 @@ define(function(require) {
                 this.setupCorrectFeedback();
             } else if (this.isPartlyCorrect()) {
                 this.setupPartlyCorrectFeedback();
-            } else {
+            } 
+             else {
                 // apply individual item feedback
                 if((this.model.get('_selectable') === 1) && this.model.get('_selectedItems')[0].feedback) {
                     this.setupIndividualFeedback(this.model.get('_selectedItems')[0]);
@@ -278,6 +285,13 @@ define(function(require) {
                     this.setupIncorrectFeedback();
                 }
             }
+        },
+
+        setupTimeUpFeedback: function() {
+             this.model.set({
+                feedbackTitle: this.model.get('title'),
+                feedbackMessage: this.model.get("_feedback").timeUp
+             });
         },
 
         setupIndividualFeedback: function(selectedItem) {
