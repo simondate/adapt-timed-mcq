@@ -41,8 +41,6 @@ define(function(require) {
         displayQuestions: function() {
             $(".timedMcq-widget").css("visibility","visible");
             $(".buttons").css("visibility","visible");
-
-
             $(".timedMcq-body-items").addClass("started");
             $(".timedMcq-time-start").addClass("started").attr("disabled", true);
             $(".timedMcq-time-instruction").addClass("started");
@@ -106,9 +104,10 @@ define(function(require) {
 
         disableQuestion: function() {
             this.stopTimer();
-            if(this.checkTimeUp()){            
+            if(this.checkTimeUp()){
                 this.setupTimeUpFeedback();
                 this.model.set('_isCorrect', false);
+                $('.buttons-action').prop('disabled', true);
                 Adapt.trigger('questionView:showFeedback', this);
             }
             this.setAllItemsEnabled(false);

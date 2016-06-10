@@ -1,16 +1,17 @@
 {
-  "name": "adapt-timed-mcq",
-  "version": "2.0.3",
-  "framework": "^2.0.0",
-  "homepage": "https://github.com/simondate/adapt-timed-mcq",
-  "issues": "https://adaptlearning.atlassian.net/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=1&priority=6&components=10507",
-  "displayName" : "Timed Multiple Choice Question",
-  "component" : "timedMcq",
-  "description": "A multiple choice question component",
-  "main": "/js/adapt-timed-mcq.js",
-  "keywords": [
-    "adapt-plugin",
-    "adapt-component"
-  ],
-  "license": "GPLv3"
+    "name": "adapt-timed-mcq",
+    "repository": "git://github.com/simondate/adapt-timed-mcq.git",
+    "framework": "^2.0.0",
+    "version": "2.0.3",
+    "homepage": "https://github.com/simondate/adapt-timed-mcq",
+    "issues": "https://github.com/simondate/adapt-timed-mcq/issues",
+    "displayName": "Timed Multiple Choice Question",
+    "component": "timedMcq",
+    "description": "An extension of the regular Adapt MCQ that allows time limits on answers.",
+    "main": "/js/adapt-timed-mcq.js",
+    "keywords": [
+        "adapt-plugin",
+        "adapt-component"
+    ],
+    "license": "GPLv3"
 }
