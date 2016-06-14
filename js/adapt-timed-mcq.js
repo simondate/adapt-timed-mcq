@@ -39,12 +39,12 @@ define(function(require) {
         },
 
         displayQuestions: function() {
-            $(".timedMcq-widget").css("visibility","visible");
-            $(".buttons").css("visibility","visible");
-            $(".timedMcq-body-items").addClass("started");
-            $(".timedMcq-time-start").addClass("started").attr("disabled", true);
-            $(".timedMcq-time-instruction").addClass("started");
-            $(".timedMcq-time").addClass("started");
+            this.$(".timedMcq-widget").css("visibility","visible");
+            this.$(".buttons").css("visibility","visible");
+            this.$(".timedMcq-body-items").addClass("started");
+            this.$(".timedMcq-time-start").addClass("started").attr("disabled", true);
+            this.$(".timedMcq-time-instruction").addClass("started");
+            this.$(".timedMcq-time").addClass("started");
         },
 
         checkTimeUp: function(){
@@ -61,7 +61,7 @@ define(function(require) {
         decreaseTime: function(){
             var seconds = this.model.get("_seconds");
             this.model.set("_seconds", --seconds);
-            $(".timedMcq-time").text(seconds);
+            this.$(".timedMcq-time").text(seconds);
             if(this.checkTimeUp()) {
                 this.disableQuestion();
             }  
@@ -105,16 +105,22 @@ define(function(require) {
         disableQuestion: function() {
             this.stopTimer();
             if(this.checkTimeUp()){
-                this.setupTimeUpFeedback();
-                this.model.set('_isCorrect', false);
-                $('.buttons-action').prop('disabled', true);
-                Adapt.trigger('questionView:showFeedback', this);
+                this.timeUp();
             }
             this.setAllItemsEnabled(false);
         },
 
         enableQuestion: function() {
             this.setAllItemsEnabled(true);
+        },
+
+        timeUp(){
+            this.setupTimeUpFeedback();
+            this.model.set('_isCorrect', false);
+            this.$('.buttons-action').prop('disabled', true);
+            this.showMarking();
+            Adapt.trigger('questionView:showFeedback', this);
+            this.updateButtons();
         },
 
         setAllItemsEnabled: function(isEnabled) {
