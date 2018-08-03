@@ -1,7 +1,7 @@
 {
     "name": "adapt-timed-mcq",
     "repository": "git://github.com/simondate/adapt-timed-mcq.git",
-    "framework": "^2.0.0",
+    "framework": ">=2.0.9",
     "version": "2.0.3",
     "homepage": "https://github.com/simondate/adapt-timed-mcq",
     "issues": "https://github.com/simondate/adapt-timed-mcq/issues",
