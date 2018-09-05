@@ -24,7 +24,7 @@
     .timedMcq-time {
         position: absolute;
         top: 17%;
-        left: 92.3%;
+        right: 20px;
         padding: 20px;
         color: @item-text-color;
         background-color: @item-color;
@@ -48,7 +48,6 @@
 
     .timedMcq-time-start {
         position: absolute;
-        width: 96%;
         height: 70%;
         top: 25%;
         font-size: 36px;
@@ -56,6 +55,10 @@
         visibility: visible;
         opacity: 1;
         transition: opacity 0.5s linear;
+
+        &:before {
+            content: "Reveal timed question";
+        }
 
         &.started {
             visibility: hidden;
@@ -127,10 +130,10 @@
     .timedMcq-item-inner {
         padding:@item-padding;
         padding-left:(@icon-size+(@item-padding-left*2));
-	    .dir-rtl & {
+        .dir-rtl & {
             padding-left:inherit;
-	        padding-right:(@icon-size+(@item-padding-left*2));
-	    }
+            padding-right:(@icon-size+(@item-padding-left*2));
+        }
     }
 
     .timedMcq-item input {
@@ -253,4 +256,16 @@
             }
         }
     }
+}
+
+.component-left .timedMcq-time {margin-right: 5%;}
+
+@media all and (max-width:@device-width-medium){
+    .component-left .timedMcq-time-start, .component-right .timedMcq-time-start {
+       width: 94% !important;
+        right: 0%;
+        margin-right: 3%;
+        margin-left: 3%;
+    }
+    .component-left .timedMcq-time {margin-right: 0%;}
 }
