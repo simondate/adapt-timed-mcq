@@ -45,11 +45,14 @@ define(function(require) {
             this.$(".timedMcq-time-start").addClass("started").attr("disabled", true);
             this.$(".timedMcq-time-instruction").addClass("started");
             this.$(".timedMcq-time").addClass("started");
+            $(".timedMcq-time-start").addClass('disabled').attr("disabled", true); //THIS LOCKES OTHER QUESTIONS UNTIL THIS ONE IS ANSWERED
         },
 
         checkTimeUp: function(){
             if(this.model.get('_seconds') > 0) {
                 return false;
+            }else{
+            	$(".timedMcq-time-start").removeClass('disabled').removeAttr("disabled"); //THIS UNLOCKES OTHER QUESTIONS
             }
             return true;
         },
@@ -61,9 +64,12 @@ define(function(require) {
         decreaseTime: function(){
             var seconds = this.model.get("_seconds");
             this.model.set("_seconds", --seconds);
-            this.$(".timedMcq-time").text(seconds);
+            this.$(".timedMcq-time").attr("tabindex","0").attr("aria-label","time left to answer "+seconds+" seconds").text(seconds); //Made the timer accessible
             if(this.checkTimeUp()) {
-                this.disableQuestion();
+                this.$("input").trigger( "click" ),
+                this.$(".buttons button.buttons-action").trigger( "click" ),
+                $(".notify button.notify-popup-done").trigger( "click" ),
+                this.disableQuestion(); //ADDED 3 LINES ABOVE IN FOR ASSESSMENT SO IT CAN BE RESET
             }  
         },
 
@@ -206,6 +212,8 @@ define(function(require) {
                 }
             }, this);
 
+            $(".timedMcq-time-start").removeClass('disabled').removeAttr("disabled"); //THIS UNLOCKES OTHER QUESTIONS
+
             return (count > 0) ? true : false;
 
         },
@@ -290,6 +298,7 @@ define(function(require) {
                     this.setupIncorrectFeedback();
                 }
             }
+
         },
 
         setupTimeUpFeedback: function() {

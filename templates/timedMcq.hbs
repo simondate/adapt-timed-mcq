@@ -9,7 +9,8 @@
         {{/if}}
 
         <div class="timedMcq-time-instruction">{{ timeInstruction }}</div>
-        <button class="timedMcq-time-start">Reveal</button>
+        
+        <button class="timedMcq-time-start"> </button>
 
         <div class="timedMcq-body-items">
             {{#if body}}
@@ -30,11 +31,12 @@
 
         <div class="timedMcq-time">{{ _seconds }}</div>
 
+    {{#if _isRadio}}<span class="aria-label" role="region" tabindex="0">Use the up and down arrows or tab to select a answer.</span>{{/if}}
     <div class="timedMcq-widget component-widget {{#unless _isEnabled}} disabled {{#if _isInteractionComplete}} complete submitted show-user-answer {{#if _isCorrect}}correct{{/if}} {{/if}} {{/unless}}">
         {{#each _items}}
         <div class="timedMcq-item component-item component-item-color {{#unless ../_isEnabled}} {{#if _isCorrect}} correct{{else}} incorrect{{/if}} {{/unless}} item-{{@index}}">
-            <input type="checkbox" id="{{../_id}}-{{@index}}" aria-labelledby="{{../_id}}-{{@index}}-aria"{{#unless ../_isEnabled}} disabled{{/unless}} aria-label="{{a11y_normalize text}}"/>
-            <label aria-hidden="true" id="{{../_id}}-{{@index}}-aria" for="{{../_id}}-{{@index}}" class="component-item-text-color component-item-border{{#unless ../_isEnabled}} disabled {{/unless}}{{#if _isSelected}} selected{{/if}}">
+            <input type="{{#if ../_isRadio}}radio{{else}}checkbox{{/if}}" id="{{../_id}}-{{@index}}" aria-labelledby="{{../_id}}-{{@index}}-aria"{{#unless ../_isEnabled}} disabled{{/unless}} aria-label="{{a11y_normalize text}}"/>
+            <label aria-hidden="true" id="{{../_id}}-{{@index}}-aria" for="{{../_id}}-{{@index}}" class="component-item-text-color component-item-border{{#unless ../_isEnabled}} disabled {{/unless}}{{#if _isSelected}} selected{{/if}} a11y-ignore" tabindex="-1">
                 <div class="timedMcq-item-state">
                     <div class="timedMcq-item-icon timedMcq-answer-icon {{#if ../_isRadio}}radio{{else}}checkbox{{/if}} component-item-text-color icon"></div>
                     <div class="timedMcq-item-icon timedMcq-correct-icon icon icon-tick"></div>
