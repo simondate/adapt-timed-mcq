@@ -23,7 +23,7 @@
 
     .timedMcq-time {
         position: absolute;
-        top: 17%;
+        top: 20px;
         right: 20px;
         padding: 20px;
         color: @item-text-color;
@@ -48,6 +48,7 @@
 
     .timedMcq-time-start {
         position: absolute;
+        width: calc(~'100% - 40px');
         height: 70%;
         top: 25%;
         font-size: 36px;
@@ -259,13 +260,13 @@
 }
 
 .component-left .timedMcq-time {margin-right: 5%;}
+.component-left .timedMcq-time-start, .component-right .timedMcq-time-start {width: calc(~'95% - 40px') !important;}
 
 @media all and (max-width:@device-width-medium){
     .component-left .timedMcq-time-start, .component-right .timedMcq-time-start {
-       width: 94% !important;
-        right: 0%;
-        margin-right: 3%;
-        margin-left: 3%;
+       width: calc(~'100% - 40px') !important;
+        right: 0;
+        left: 20px;
     }
     .component-left .timedMcq-time {margin-right: 0%;}
 }
