@@ -37,7 +37,7 @@
             "required": true,
             "default": 1,
             "title": "Attempts",
-            "inputType": "Number",
+            "inputType": "Hidden",
             "validators": [
                 "required",
                 "number"
@@ -62,7 +62,7 @@
             "default": false,
             "title": "Display Attempts",
             "inputType": {
-                "type": "Boolean",
+                "type": "Hidden",
                 "options": [
                     true,
                     false
