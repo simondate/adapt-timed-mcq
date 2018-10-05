@@ -33,7 +33,7 @@
             "help": "This is the instruction text"
         },
         "_attempts": {
-            "type": "number",
+            "type": "hidden",
             "required": true,
             "default": 1,
             "title": "Attempts",
@@ -57,7 +57,7 @@
             "help": "Number of seconds allowed to answer the question."
         },
         "_shouldDisplayAttempts": {
-            "type": "boolean",
+            "type": "hidden",
             "required": false,
             "default": false,
             "title": "Display Attempts",
