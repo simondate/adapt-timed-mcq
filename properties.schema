@@ -34,14 +34,11 @@
         },
         "_attempts": {
             "type": "hidden",
-            "required": true,
-            "default": 1,
+            "required": false,
+            "default": "",
             "title": "Attempts",
             "inputType": "Hidden",
-            "validators": [
-                "required",
-                "number"
-            ],
+            "validators": [],
             "help": "How many attempts the learner is allowed"
         },
         "_seconds": {
@@ -55,6 +52,15 @@
                 "number"
             ],
             "help": "Number of seconds allowed to answer the question."
+        },
+        "_timerReveal": {
+            "type": "string",
+            "required": false,
+            "default": "Reveal timed question",
+            "title": "Timer MCQ Reveal button text",
+            "inputType": "Text",
+            "validators": [],
+            "help": "Button label text for the timed question before it is revealed."
         },
         "_shouldDisplayAttempts": {
             "type": "hidden",
@@ -376,20 +382,20 @@
                     }
                 },
                 "remainingAttemptsText": {
-                    "type": "string",
+                    "type": "hidden",
                     "required": false,
                     "default": "",
                     "title": "Attempts Remaining Text",
-                    "inputType": "Text",
+                    "inputType": "Hidden",
                     "validators": [],
                     "help": "Shown when there are multiple attempts left"
                 },
                 "remainingAttemptText": {
-                    "type": "string",
+                    "type": "hidden",
                     "required": false,
                     "default": "",
                     "title": "Final Attempt Text",
-                    "inputType": "Text",
+                    "inputType": "Hidden",
                     "validators": [],
                     "help": "Shown when there is one attempt left"
                 }
