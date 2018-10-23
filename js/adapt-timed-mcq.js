@@ -28,6 +28,7 @@ define(function(require) {
             this.setupRandomisation();
             
             this.restoreUserAnswers();
+
         },
 
         startTimer: function() {
@@ -42,17 +43,20 @@ define(function(require) {
             this.$(".timedMcq-widget").css("visibility","visible");
             this.$(".buttons").css("visibility","visible");
             this.$(".timedMcq-body-items").addClass("started");
-            this.$(".timedMcq-time-start").addClass("started").attr("disabled", true);
+            this.$(".timedMcq-time-start").addClass("started").prop('disabled', true);
             this.$(".timedMcq-time-instruction").addClass("started");
             this.$(".timedMcq-time").addClass("started");
-            $(".timedMcq-time-start").addClass('disabled').attr("disabled", true); //THIS LOCKES OTHER QUESTIONS UNTIL THIS ONE IS ANSWERED
+            this.$(".aria-instruct").removeClass("display-none");
+            this.$('.buttons-action').removeClass('disabled').prop('disabled', false);
+            $(".timedMcq-time-start").addClass('disabled').prop('disabled', true); //THIS LOCKES OTHER QUESTIONS UNTIL THIS ONE IS ANSWERED
         },
 
         checkTimeUp: function(){
             if(this.model.get('_seconds') > 0) {
                 return false;
             }else{
-            	$(".timedMcq-time-start").removeClass('disabled').removeAttr("disabled"); //THIS UNLOCKES OTHER QUESTIONS
+                 $(".timedMcq-time-start").removeClass('disabled').prop('disabled', false); //THIS UNLOCKES OTHER QUESTIONS
+
             }
             return true;
         },
@@ -66,10 +70,7 @@ define(function(require) {
             this.model.set("_seconds", --seconds);
             this.$(".timedMcq-time").attr("tabindex","0").attr("aria-label","time left to answer "+seconds+" seconds").text(seconds); //Made the timer accessible
             if(this.checkTimeUp()) {
-                this.$("input").trigger( "click" ),
-                this.$(".buttons button.buttons-action").trigger( "click" ),
-                $(".notify button.notify-popup-done").trigger( "click" ),
-                this.disableQuestion(); //ADDED 3 LINES ABOVE IN FOR ASSESSMENT SO IT CAN BE RESET
+                this.disableQuestion(); 
             }  
         },
 
@@ -146,6 +147,25 @@ define(function(require) {
 
         onQuestionRendered: function() {
             this.setReadyStatus();
+            window.setTimeout(function(){
+                $('.timedMcq-component .buttons-action').addClass('disabled').prop('disabled', true);
+            }, 866);
+
+            if (  this.$(".timedMcq-widget").hasClass( "submitted" ) || this.$(".timedMcq-widget").hasClass( "complete" )  ) {
+                this.$( '.timedMcq-time' ).text( '0' );
+            }
+
+            //BELOW DISPLAYS ANSWERS OR TIME UP RESPONSE ON REVISIT
+            if ( this.$( '.timedMcq-time' ).is( ":contains('0')" ) ) {
+                this.$(".timedMcq-widget").css("visibility","visible");
+                this.$(".buttons").css("visibility","visible");
+                this.$(".timedMcq-body-items").addClass("started");
+                this.$(".timedMcq-time-start").addClass("started").prop('disabled', true);
+                this.$(".timedMcq-item input").addClass('disabled').prop('disabled', true);
+                this.$(".timedMcq-item label").addClass('disabled');
+                this.$(".timedMcq-time-instruction").addClass("started");
+                this.$(".aria-instruct").removeClass("display-none");
+            }
         },
 
         onKeyPress: function(event) {
@@ -212,7 +232,7 @@ define(function(require) {
                 }
             }, this);
 
-            $(".timedMcq-time-start").removeClass('disabled').removeAttr("disabled"); //THIS UNLOCKES OTHER QUESTIONS
+            $(".timedMcq-time-start").removeClass('disabled').prop('disabled', false); //THIS UNLOCKES OTHER QUESTIONS
 
             return (count > 0) ? true : false;
 
@@ -298,7 +318,6 @@ define(function(require) {
                     this.setupIncorrectFeedback();
                 }
             }
-
         },
 
         setupTimeUpFeedback: function() {
