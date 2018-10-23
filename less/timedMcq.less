@@ -21,6 +21,10 @@
         }
     }
 
+    .attemptfr {
+    	display:none;
+    }
+
     .timedMcq-time {
         position: absolute;
         top: 20px;
@@ -56,10 +60,6 @@
         visibility: visible;
         opacity: 1;
         transition: opacity 0.5s linear;
-
-        &:before {
-            content: "Reveal timed question";
-        }
 
         &.started {
             visibility: hidden;
@@ -172,6 +172,18 @@
         top:50%;
         margin-top:-(@icon-size/2);
         z-index:0;
+    }
+}
+
+.timedMcq-inner {
+    .buttons {
+        .buttons-marking-icon {
+            margin-top: inherit;
+        }
+
+        .buttons-display-inner {
+            display: none;
+        }
     }
 }
 
