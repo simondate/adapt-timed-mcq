@@ -10,7 +10,7 @@
 
         <div class="timedMcq-time-instruction">{{ timeInstruction }}</div>
         
-        <button class="timedMcq-time-start"> </button>
+        <button class="timedMcq-time-start">{{ _timerReveal }}</button>
 
         <div class="timedMcq-body-items">
             {{#if body}}
@@ -31,7 +31,7 @@
 
         <div class="timedMcq-time">{{ _seconds }}</div>
 
-    {{#if _isRadio}}<span class="aria-label" role="region" tabindex="0">Use the up and down arrows or tab to select a answer.</span>{{/if}}
+    {{#if _isRadio}}<span class="aria-label display-none aria-instruct" role="region" tabindex="0">Use the up and down arrows or tab to select a answer.</span>{{/if}}
     <div class="timedMcq-widget component-widget {{#unless _isEnabled}} disabled {{#if _isInteractionComplete}} complete submitted show-user-answer {{#if _isCorrect}}correct{{/if}} {{/if}} {{/unless}}">
         {{#each _items}}
         <div class="timedMcq-item component-item component-item-color {{#unless ../_isEnabled}} {{#if _isCorrect}} correct{{else}} incorrect{{/if}} {{/unless}} item-{{@index}}">
