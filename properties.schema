@@ -35,7 +35,7 @@
         "_attempts": {
             "type": "hidden",
             "required": false,
-            "default": "",
+            "default": "1",
             "title": "Attempts",
             "inputType": "Hidden",
             "validators": [],
