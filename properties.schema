@@ -24,6 +24,39 @@
             "default": "half-width",
             "editorOnly": true
         },
+        "_timedimgEnabled": {
+          "type": "boolean",
+          "required":true,
+          "default": false,
+          "title": "Enable timed image before question",
+          "inputType": { "type": "Boolean", "options": [false, true]},
+          "validators": [],
+          "help": "Set to true to enable an image with timer before the MCQ."
+        },
+        "_graphic": {
+          "type": "object",
+          "required": false,
+          "title": "Insert the timed image",
+          "properties": {
+            "src": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "inputType": "Asset:image",
+              "validators": [],
+              "help": "This is the image that appears before the question is displayed."
+            },
+            "alt": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "inputType": "Text",
+              "validators": [],
+              "help": "Alternative text for this image",
+              "translatable": true
+            }        
+          }
+        },
         "instruction": {
             "type": "string",
             "required": false,
