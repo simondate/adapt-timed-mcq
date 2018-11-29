@@ -17,6 +17,7 @@
         &.started {
             visibility: hidden;
             opacity: 0;
+            z-index: 0;
             transition: visibility 0s 0.5s, opacity 0.5s linear;
         }
     }
@@ -36,6 +37,13 @@
         &.started {
             visibility: visible;
             opacity: 1;
+            z-index: 20;
+            transition: visibility 0s 0.5s, opacity 0.5s linear;
+        }
+        &.imgcounton {
+            visibility: visible;
+            opacity: 1;
+            z-index: 20;
             transition: visibility 0s 0.5s, opacity 0.5s linear;
         }
     }
@@ -46,6 +54,7 @@
         &.started {
             visibility: visible;
             opacity: 1;
+            z-index: 20;
             transition: visibility 0s 0.5s, opacity 0.5s linear;
         }
     }
@@ -64,6 +73,7 @@
         &.started {
             visibility: hidden;
             opacity: 0;
+            z-index: 0;
             transition: visibility 0s 0.5s, opacity 0.5s linear;
         }
     }      
