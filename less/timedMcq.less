@@ -23,7 +23,7 @@
     }
 
     .attemptfr {
-    	display:none;
+        display:none;
     }
 
     .timedMcq-time {
@@ -62,8 +62,8 @@
     .timedMcq-time-start {
         position: absolute;
         width: calc(~'100% - 40px');
-        height: 70%;
-        top: 25%;
+        height: calc(~'100% - 40px');
+        top: 20px;
         font-size: 36px;
         z-index: 10;
         visibility: visible;
@@ -187,6 +187,7 @@
 
 .timedMcq-inner {
     .buttons {
+        visibility: hidden;
         .buttons-marking-icon {
             margin-top: inherit;
         }
@@ -247,9 +248,6 @@
         }
     }
     
-    .buttons {
-        visibility: hidden;
-    }
 }
 
 .no-touch {
@@ -283,6 +281,32 @@
 
 .component-left .timedMcq-time {margin-right: 5%;}
 .component-left .timedMcq-time-start, .component-right .timedMcq-time-start {width: calc(~'95% - 40px') !important;}
+
+.embedimgtimeup {
+    .timedMcq-time-start {
+        display: none !important;
+    }
+    .timedMcq-body-items {
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    .imgcounton {
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+    .buttons {
+        visibility: visible !important;
+    }
+    .timedMcq-widget .timedMcq-item label{
+        background-color: inherit;
+        border-color: inherit;
+        cursor: pointer;
+    }
+    .timedMcq-widget.complete.submitted .timedMcq-item label{
+        background-color: @disabled-color;
+        border-color: @disabled-color;
+    }
+}
 
 @media all and (max-width:@device-width-medium){
     .component-left .timedMcq-time-start, .component-right .timedMcq-time-start {
