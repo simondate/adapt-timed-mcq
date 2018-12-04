@@ -132,7 +132,6 @@ define(function(require) {
                 $("." + currentimedmcq + ".embedimgtimeup .aria-instruct").removeClass("display-none");
                 $("." + currentimedmcq + ".embedimgtimeup .buttons-action").removeClass("disabled").prop("disabled", false);
                 $("." + currentimedmcq + ".embedimgtimeup .timedMcq-item input").removeClass("disabled").prop("disabled", false);
-                $(".timedMcq-time-start").removeClass("disabled").prop("disabled", false); //THIS UNLOCKES OTHER QUESTIONS
                 $(".enabledimgtime .timedMcq-time-start").addClass("disabled").prop("disabled", true);//THIS LOCKES TIMED IMAGE QUESTIONS
             }
         },
@@ -244,8 +243,8 @@ define(function(require) {
         onQuestionRendered: function() {
             this.setReadyStatus();
 
+            var seconds = this.model.get("_seconds");
             var currentimedmcq = this.model.get('_id');
-
             
             if (this.model.get('_timedimgEnabled') && this.model.get('_isEnabled')) {
                 $("." + currentimedmcq + ".timedMcq-component").addClass("enabledimgtime");
@@ -271,7 +270,15 @@ define(function(require) {
 
             //BELOW DISPLAYS ANSWERS OR TIME UP RESPONSE ON REVISIT
             if ( $("." + currentimedmcq + ".timedMcq-component").hasClass( "enabledimgtime" ) ) {
-                //DO NOTHING
+                if (seconds <= 0) {
+                    $(".enabledimgtime .timedMcq-widget").css("visibility","visible");
+                    $(".enabledimgtime .timedMcq-body-items").addClass("started");
+                    $(".enabledimgtime .buttons").css("visibility","visible");
+                    $(".enabledimgtime .timedMcq-time-start").addClass("display-none");
+                    $(".enabledimgtime .timedMcq-time-instruction").addClass("started");
+                    $(".enabledimgtime .timedMcq-time").removeClass("display-none").removeClass("started");
+                    $(".enabledimgtime .aria-instruct").addClass("display-none");
+                }
             } else if ( this.$( ".timedMcq-time" ).text() == "0" ) {
                 $("." + currentimedmcq + ".timedMcq-component").addClass("timeuplock");
                 $("." + currentimedmcq + ".timeuplock .timedMcq-body-items").addClass("started");
@@ -439,6 +446,7 @@ define(function(require) {
                     this.setupIncorrectFeedback();
                 }
             }
+            $(".enabledimgtime .timedMcq-time-start").addClass("disabled").prop("disabled", true);//THIS LOCKES TIMED IMAGE QUESTIONS
         },
 
         setupTimeUpFeedback: function() {
@@ -446,6 +454,7 @@ define(function(require) {
                 feedbackTitle: this.model.get('title'),
                 feedbackMessage: this.model.get("_feedback").timeUp
              });
+             $(".enabledimgtime .timedMcq-time-start").addClass("disabled").prop("disabled", true);//THIS LOCKES TIMED IMAGE QUESTIONS
         },
 
         setupIndividualFeedback: function(selectedItem) {
@@ -453,6 +462,7 @@ define(function(require) {
                  feedbackTitle: this.model.get('title'),
                  feedbackMessage: selectedItem.feedback
              });
+             $(".enabledimgtime .timedMcq-time-start").addClass("disabled").prop("disabled", true);//THIS LOCKES TIMED IMAGE QUESTIONS
         },
 
         // This is important and should give the user feedback on how they answered the question
