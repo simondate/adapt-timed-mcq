@@ -29,11 +29,35 @@
     .timedMcq-time {
         position: absolute;
         top: 20px;
-        right: 20px;
+        right: 19px;
         padding: 20px;
+        padding-right: 10px;
+        text-indent: 2px;
         color: @item-text-color;
         background-color: @item-color;
         visibility: hidden;
+        border: 1px solid @white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+        min-width: 30px;
+        text-align: center;
+        &:after {
+            content: "\e624";
+            vertical-align: middle;
+            font-size: 22px;
+            float: left;
+            margin-left: -10px;
+            display: block;
+            margin-top: -2px;
+            font-family: 'vanilla';
+            speak: none;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
         &.started {
             visibility: visible;
             opacity: 1;
@@ -75,6 +99,10 @@
             opacity: 0;
             z-index: 0;
             transition: visibility 0s 0.5s, opacity 0.5s linear;
+        }
+
+        img {
+            display: none !important;
         }
     }      
 
@@ -307,6 +335,12 @@
 }
 
 /* Below are overrides for when the images time is up so question can be visible */
+
+.enabledimgtime {
+    button.timedMcq-time-start.disabled {
+        color: transparent !important;
+    }
+}
 .embedimgtimeup {
     .timedMcq-time-start {
         display: none !important;
