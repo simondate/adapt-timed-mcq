@@ -272,10 +272,10 @@ define(function(require) {
             if ( $("." + currentimedmcq + ".timedMcq-component").hasClass( "enabledimgtime" ) ) {
                 if (seconds <= 0) {
                     $(".enabledimgtime .timedMcq-widget").css("visibility","visible");
-                    $(".enabledimgtime .timedMcq-body-items").addClass("started");
+                    $(".enabledimgtime .timedMcq-body-items").css({"visibility":"visible","opacity":"1"}).addClass("started");
                     $(".enabledimgtime .buttons").css("visibility","visible");
                     $(".enabledimgtime .timedMcq-time-start").addClass("display-none");
-                    $(".enabledimgtime .timedMcq-time-instruction").addClass("started");
+                    $(".enabledimgtime .timedMcq-time-instruction").css({"visibility":"visible","opacity":"1"}).addClass("started");
                     $(".enabledimgtime .timedMcq-time").removeClass("display-none").removeClass("started");
                     $(".enabledimgtime .aria-instruct").addClass("display-none");
                 }
