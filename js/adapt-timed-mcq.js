@@ -54,11 +54,16 @@ define(function(require) {
         },
 
         checkTimeUp: function(){
-            if(this.model.get('_seconds') > 0 || $(".timedMcq-component").hasClass( "embedimgtimeup" ) ) {
+            if(this.model.get('_seconds') > 0 ) {
                 return false;
             }else{
-                $(".timedMcq-time-start").removeClass("disabled").prop("disabled", false); //THIS UNLOCKES OTHER QUESTIONS
-                this.$( '.timedMcq-time' ).attr("tabindex","0").attr("aria-label","time left to answer 0 seconds").text( '0' );
+                if ( $(".timedMcq-component").hasClass( "enabledimgtime" ) && !$(".timedMcq-component").hasClass( "embedimgtimeup" ) ) {
+                    //don't do anything
+                    $(".timedMcq-time-start").addClass("disabled").prop("disabled", true); //THIS LOCKES IMAGE TIMED QUESTIONS
+                } else {
+                    $(".timedMcq-time-start").removeClass("disabled").prop("disabled", false); //THIS UNLOCKES OTHER QUESTIONS
+                    this.$( '.timedMcq-time' ).attr("tabindex","0").attr("aria-label","time left to answer 0 seconds").text( '0' );
+                }
             }
             return true;
         },
@@ -75,11 +80,9 @@ define(function(require) {
             var seconds = this.model.get("_seconds");
             this.model.set("_seconds", --seconds);
             this.$(".timedMcq-time").attr("tabindex","0").attr("aria-label","time left to answer "+seconds+" seconds").text(seconds); //Made the timer accessible
-            if (seconds <= 0) {
-                if(this.checkTimeUp()) {
-                    this.disableQuestion(); 
-                }
-            }  
+            if(this.checkTimeUp()) {
+                this.disableQuestion(); 
+            }
         },
 
         inview: function(event, visible, visiblePartX, visiblePartY) {
@@ -129,7 +132,8 @@ define(function(require) {
                 $("." + currentimedmcq + ".embedimgtimeup .aria-instruct").removeClass("display-none");
                 $("." + currentimedmcq + ".embedimgtimeup .buttons-action").removeClass("disabled").prop("disabled", false);
                 $("." + currentimedmcq + ".embedimgtimeup .timedMcq-item input").removeClass("disabled").prop("disabled", false);
-                $(".embedimgtimeup .timedMcq-time-start").removeClass("disabled").prop("disabled", false); //THIS UNLOCKES OTHER QUESTIONS
+                $(".timedMcq-time-start").removeClass("disabled").prop("disabled", false); //THIS UNLOCKES OTHER QUESTIONS
+                $(".enabledimgtime .timedMcq-time-start").addClass("disabled").prop("disabled", true);//THIS LOCKES TIMED IMAGE QUESTIONS
             }
         },
 
@@ -266,23 +270,19 @@ define(function(require) {
             }
 
             //BELOW DISPLAYS ANSWERS OR TIME UP RESPONSE ON REVISIT
-            if ( this.$( '.timedMcq-time' ).text() == '0') {
-                this.$(".timedMcq-widget").css("visibility","visible");
-                this.$(".buttons").css("visibility","visible");
-                this.$(".timedMcq-body-items").addClass("started");
-                this.$(".timedMcq-time-start").addClass("started").prop("disabled", true);
-                this.$(".timedMcq-time-start").remove();
-                this.$(".timedMcq-item input").addClass('disabled').prop("disabled", true);
-                this.$(".timedMcq-time-instruction").addClass("started");
-                this.$(".aria-instruct").removeClass("display-none");
-            } else {
-                this.$(".timedMcq-widget").css("visibility","hidden");
-                this.$(".timedMcq-body-items").removeClass("started");
-                this.$(".timedMcq-time-start").removeClass("started").prop("disabled", false);
-                this.$(".timedMcq-time-instruction").removeClass("started");
-                this.$(".timedMcq-time").removeClass("started");
-                this.$(".aria-instruct").addClass("display-none");
-                this.$('.buttons-action').addClass("disabled").prop("disabled", true);
+            if ( $("." + currentimedmcq + ".timedMcq-component").hasClass( "enabledimgtime" ) ) {
+                //DO NOTHING
+            } else if ( this.$( ".timedMcq-time" ).text() == "0" ) {
+                $("." + currentimedmcq + ".timedMcq-component").addClass("timeuplock");
+                $("." + currentimedmcq + ".timeuplock .timedMcq-body-items").addClass("started");
+                $("." + currentimedmcq + ".timeuplock .timedMcq-time-start").addClass("started").prop("disabled", true);
+                 window.setTimeout(function(){
+                    $("." + currentimedmcq + ".timeuplock .timedMcq-item input").addClass("disabled").prop("disabled", true);
+                    $("." + currentimedmcq + ".timeuplock .timedMcq-item label").addClass("disabled").prop("disabled", true);
+                    $("." + currentimedmcq + ".timeuplock .buttons-action").addClass("disabled").prop("disabled", true);
+                }, 253);
+                $("." + currentimedmcq + ".timeuplock .timedMcq-time-instruction").addClass("started");
+                $("." + currentimedmcq + ".timeuplock .aria-instruct").removeClass("display-none");
             }
         },
 
@@ -352,7 +352,7 @@ define(function(require) {
             }, this);
 
             $(".timedMcq-time-start").removeClass("disabled").prop("disabled", false); //THIS UNLOCKES OTHER QUESTIONS
-
+            
             return (count >= 0) ? true : false;
 
         },
