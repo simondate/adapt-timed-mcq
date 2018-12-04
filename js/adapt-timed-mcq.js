@@ -154,6 +154,11 @@ define(function(require) {
             if (this.model.get('_timedimgEnabled') && this.model.get('_isEnabled')) {
                 
                 var currentimedmcq = this.model.get('_id');
+                var timedimg_height = $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-start img").height(); // Get my img height
+
+                if (this.model.get('_timedimgEnabled') && this.model.get('_graphic').src ) {
+                    this.$(".timedMcq-inner").css("height", timedimg_height+"px");
+                }
 
                 if (  $("." + currentimedmcq + " .timedMcq-widget").hasClass( "submitted" ) || $("." + currentimedmcq + " .timedMcq-widget").hasClass( "complete" ) ) {
                     
@@ -173,7 +178,7 @@ define(function(require) {
             } else {
                  //NOT Timed image
             }
-            //var timerimgraphic = this.model.get("_graphic");
+            
         },
 
         restoreUserAnswers: function() {
@@ -245,6 +250,11 @@ define(function(require) {
 
             var seconds = this.model.get("_seconds");
             var currentimedmcq = this.model.get('_id');
+            var timedimg_height = $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-start img").height(); // Get my img height
+
+            if (this.model.get('_timedimgEnabled') && this.model.get('_graphic').src ) {
+                this.$(".timedMcq-inner").css("height", timedimg_height+"px");
+            }
             
             if (this.model.get('_timedimgEnabled') && this.model.get('_isEnabled')) {
                 $("." + currentimedmcq + ".timedMcq-component").addClass("enabledimgtime");
