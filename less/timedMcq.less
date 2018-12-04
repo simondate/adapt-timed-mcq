@@ -282,6 +282,28 @@
 .component-left .timedMcq-time {margin-right: 5%;}
 .component-left .timedMcq-time-start, .component-right .timedMcq-time-start {width: calc(~'95% - 40px') !important;}
 
+/* Below are overrides for when the MCQ time is up so question is locked down */
+.timeuplock {
+    .timedMcq-widget{
+        visibility: visible !important;
+        .timedMcq-item{
+            label{
+                cursor: default !important;
+            }
+        }
+    }
+    .buttons {
+        visibility: visible !important;
+        .buttons-action {
+            background-color: @disabled-color !important;
+            border-color: @disabled-color !important;
+            color: @disabled-color-inverted !important;
+            cursor: default !important;
+        }
+    }
+}
+
+/* Below are overrides for when the images time is up so question can be visible */
 .embedimgtimeup {
     .timedMcq-time-start {
         display: none !important;
