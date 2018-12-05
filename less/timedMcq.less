@@ -318,6 +318,19 @@
         }
 
     }
+
+    &.timed4column {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+
+        .timedMcq-item {
+            width: 24.25%;
+            margin-top: 1%;
+        }
+
+    }
     
 }
 
@@ -450,6 +463,13 @@
             }
 
         }
+
+        &.timed4column {
+            .timedMcq-item {
+                width: 48.5%;
+            }
+
+        }
     }
     .component-left .timedMcq-time-start, .component-right .timedMcq-time-start {
        width: calc(~'100% - 40px') !important;
@@ -474,6 +494,18 @@
         }
 
         &.timed3column {
+            display: inherit;
+            flex-wrap: inherit;
+            justify-content: inherit;
+            align-items: inherit;
+            .timedMcq-item {
+                width: inherit;
+                margin-top: inherit;
+            }
+
+        }
+
+        &.timed4column {
             display: inherit;
             flex-wrap: inherit;
             justify-content: inherit;
