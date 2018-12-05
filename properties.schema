@@ -110,6 +110,15 @@
             "validators": [],
             "help": "Select 'true' to display the numbers of attempts left"
         },
+        "_timeroffEnabled": {
+          "type": "boolean",
+          "required":true,
+          "default": false,
+          "title": "Disable Timer Feature",
+          "inputType": { "type": "Boolean", "options": [false, true]},
+          "validators": [],
+          "help": "Set to true to disable the timer on this component."
+        },
         "_isRandom": {
             "type": "boolean",
             "required": false,
@@ -162,6 +171,16 @@
                 "required"
             ],
             "help": "How many items are selectable"
+        },
+        "_itemscolumnnum": {
+          "type": "string",
+          "required": true,
+          "enum": ["1", "2", "3"],
+          "inputType": {"type": "Select", "options": ["1", "2", "3"]},
+          "title": "Select the Number of Item Columns",
+          "default": "1",
+          "validators": ["required"],
+          "help": "Choose an amount of columns to have for your items"
         },
         "_items": {
             "type": "array",
