@@ -11,7 +11,8 @@ define(function(require) {
             'blur .timedMcq-item input':'onItemBlur',
             'change .timedMcq-item input':'onItemSelected',
             'keyup .timedMcq-item input':'onKeyPress',
-            'click .timedMcq-time-start' : 'startTimer'
+            'click .timedMcq-time-start' : 'startTimer',
+            'click .stoppedimgtimer' : 'setupInitialimgTimer'
         },
 
         resetQuestionOnRevisit: function() {
@@ -73,6 +74,7 @@ define(function(require) {
         },
 
         stopTimer2: function(){
+            $(".enabledimgtime .imgcounton").addClass("stoppedimgtimer");
             clearInterval(timer2);
         },
 
@@ -156,11 +158,13 @@ define(function(require) {
                 var currentimedmcq = this.model.get('_id');
                 var timedimg_height = $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-start img").height(); // Get my img height
 
+                $("." + currentimedmcq + ".enabledimgtime .timedMcq-time").addClass("stoppedimgtimer");
+
                 if (this.model.get('_timedimgEnabled') && this.model.get('_graphic').src ) {
                     if (timedimg_height == 0) {
-                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("height", "");
+                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("min-height", "");
                     } else {
-                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("height", timedimg_height+"px");
+                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("min-height", timedimg_height+"px");
                     }
                 }
 
@@ -175,7 +179,7 @@ define(function(require) {
                     
                     parent2 = this
                     timer2 = setInterval(
-                            function(){ parent2.decreaseTime2() } , 1000
+                            function(){ parent2.decreaseTime2(); $("." + currentimedmcq + ".enabledimgtime .imgcounton").removeClass("stoppedimgtimer"); } , 1000
                     );
                 }
 
@@ -264,9 +268,9 @@ define(function(require) {
 
                 if (this.model.get('_timedimgEnabled') && this.model.get('_graphic').src ) {
                     if (timedimg_height == 0) {
-                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("height", "");
+                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("min-height", "");
                     } else {
-                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("height", timedimg_height+"px");
+                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("min-height", timedimg_height+"px");
                     }
                 }
             }
@@ -305,9 +309,20 @@ define(function(require) {
                 $("." + currentimedmcq + ".timeuplock .timedMcq-time-start").addClass("started").prop("disabled", true);
                  window.setTimeout(function(){
                     $("." + currentimedmcq + ".timeuplock .timedMcq-item input").addClass("disabled").prop("disabled", true);
-                    $("." + currentimedmcq + ".timeuplock .timedMcq-item label").addClass("disabled").prop("disabled", true);
+                    $("." + currentimedmcq + ".timeuplock .timedMcq-item label").css("cursor","default").addClass("disabled").prop("disabled", true);
                     $("." + currentimedmcq + ".timeuplock .buttons-action").addClass("disabled").prop("disabled", true);
                 }, 253);
+                $("." + currentimedmcq + ".timeuplock .timedMcq-time-instruction").addClass("started");
+                $("." + currentimedmcq + ".timeuplock .aria-instruct").removeClass("display-none");
+            }
+
+            //THIS OVERRIDES THE TIMER AS IT HAS BEEN UNENABLED ON THE COMPONENT
+            if (this.model.get('_timeroffEnabled') && this.model.get('_isEnabled')) {
+                $("." + currentimedmcq + ".timedMcq-component").addClass("timeuplock").addClass("notimenabled");
+                $("." + currentimedmcq + ".timeuplock .timedMcq-body-items").addClass("started");
+                $("." + currentimedmcq + ".timeuplock .timedMcq-time-start").addClass("started").prop("disabled", true);
+                $("." + currentimedmcq + ".timeuplock .timedMcq-item label").css("cursor","pointer");
+                $("." + currentimedmcq + ".timeuplock .buttons-action").removeClass("disabled").prop("disabled", false);
                 $("." + currentimedmcq + ".timeuplock .timedMcq-time-instruction").addClass("started");
                 $("." + currentimedmcq + ".timeuplock .aria-instruct").removeClass("display-none");
             }
