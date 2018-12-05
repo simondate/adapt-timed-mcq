@@ -157,7 +157,11 @@ define(function(require) {
                 var timedimg_height = $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-start img").height(); // Get my img height
 
                 if (this.model.get('_timedimgEnabled') && this.model.get('_graphic').src ) {
-                    this.$(".timedMcq-inner").css("height", timedimg_height+"px");
+                    if (timedimg_height == 0) {
+                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("height", "");
+                    } else {
+                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("height", timedimg_height+"px");
+                    }
                 }
 
                 if (  $("." + currentimedmcq + " .timedMcq-widget").hasClass( "submitted" ) || $("." + currentimedmcq + " .timedMcq-widget").hasClass( "complete" ) ) {
@@ -250,15 +254,21 @@ define(function(require) {
 
             var seconds = this.model.get("_seconds");
             var currentimedmcq = this.model.get('_id');
-            var timedimg_height = $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-start img").height(); // Get my img height
-
-            if (this.model.get('_timedimgEnabled') && this.model.get('_graphic').src ) {
-                this.$(".timedMcq-inner").css("height", timedimg_height+"px");
-            }
+            
             
             if (this.model.get('_timedimgEnabled') && this.model.get('_isEnabled')) {
                 $("." + currentimedmcq + ".timedMcq-component").addClass("enabledimgtime");
                 $(".enabledimgtime .timedMcq-time-start").addClass("disabled").prop("disabled", true); //LOCKS ALL TIMED IMAGES
+
+                var timedimg_height = $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-start img").height(); // Get my img height
+
+                if (this.model.get('_timedimgEnabled') && this.model.get('_graphic').src ) {
+                    if (timedimg_height == 0) {
+                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("height", "");
+                    } else {
+                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("height", timedimg_height+"px");
+                    }
+                }
             }
 
             if (  this.$(".timedMcq-widget").hasClass( "submitted" ) || this.$(".timedMcq-widget").hasClass( "complete" ) ) {
@@ -281,13 +291,13 @@ define(function(require) {
             //BELOW DISPLAYS ANSWERS OR TIME UP RESPONSE ON REVISIT
             if ( $("." + currentimedmcq + ".timedMcq-component").hasClass( "enabledimgtime" ) ) {
                 if (seconds <= 0) {
-                    $(".enabledimgtime .timedMcq-widget").css("visibility","visible");
-                    $(".enabledimgtime .timedMcq-body-items").css({"visibility":"visible","opacity":"1"}).addClass("started");
-                    $(".enabledimgtime .buttons").css("visibility","visible");
-                    $(".enabledimgtime .timedMcq-time-start").addClass("display-none");
-                    $(".enabledimgtime .timedMcq-time-instruction").css({"visibility":"visible","opacity":"1"}).addClass("started");
-                    $(".enabledimgtime .timedMcq-time").removeClass("display-none").removeClass("started");
-                    $(".enabledimgtime .aria-instruct").addClass("display-none");
+                    $("." + currentimedmcq + ".enabledimgtime .timedMcq-widget").css("visibility","visible");
+                    $("." + currentimedmcq + ".enabledimgtime .timedMcq-body-items").css({"visibility":"visible","opacity":"1"}).addClass("started");
+                    $("." + currentimedmcq + ".enabledimgtime .buttons").css("visibility","visible");
+                    $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-start").addClass("display-none");
+                    $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-instruction").css({"visibility":"visible","opacity":"1"}).addClass("started");
+                    $("." + currentimedmcq + ".enabledimgtime .timedMcq-time").removeClass("display-none").removeClass("started");
+                    $("." + currentimedmcq + ".enabledimgtime .aria-instruct").addClass("display-none");
                 }
             } else if ( this.$( ".timedMcq-time" ).text() == "0" ) {
                 $("." + currentimedmcq + ".timedMcq-component").addClass("timeuplock");
