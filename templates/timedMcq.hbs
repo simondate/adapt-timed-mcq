@@ -32,7 +32,7 @@
         <div class="timedMcq-time">{{ _seconds }}</div>
 
     {{#if _isRadio}}<span class="aria-label display-none aria-instruct" role="region" tabindex="0">Use the up and down arrows or tab to select a answer.</span>{{/if}}
-    <div class="timedMcq-widget component-widget {{#unless _isEnabled}} disabled {{#if _isInteractionComplete}} complete submitted show-user-answer {{#if _isCorrect}}correct{{/if}} {{/if}} {{/unless}}">
+    <div class="timedMcq-widget component-widget {{#unless _isEnabled}} disabled {{#if _isInteractionComplete}} complete submitted show-user-answer {{#if _isCorrect}}correct{{/if}} {{/if}} {{/unless}} {{#if _itemscolumnnum}}timed{{_itemscolumnnum}}column{{/if}}">
         {{#each _items}}
         <div class="timedMcq-item component-item component-item-color {{#unless ../_isEnabled}} {{#if _isCorrect}} correct{{else}} incorrect{{/if}} {{/unless}} item-{{@index}}">
             <input type="{{#if ../_isRadio}}radio{{else}}checkbox{{/if}}" id="{{../_id}}-{{@index}}" aria-labelledby="{{../_id}}-{{@index}}-aria"{{#unless ../_isEnabled}} disabled{{/unless}} aria-label="{{a11y_normalize text}}"/>
