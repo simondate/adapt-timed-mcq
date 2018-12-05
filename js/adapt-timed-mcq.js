@@ -156,9 +156,14 @@ define(function(require) {
             if (this.model.get('_timedimgEnabled') && this.model.get('_isEnabled')) {
                 
                 var currentimedmcq = this.model.get('_id');
+                var seconds = this.model.get("_seconds");
                 var timedimg_height = $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-start img").height(); // Get my img height
 
-                $("." + currentimedmcq + ".enabledimgtime .timedMcq-time").addClass("stoppedimgtimer");
+                if (seconds <= 0) {
+                    $(".enabledimgtime .timedMcq-time").removeClass("stoppedimgtimer");
+                } else {
+                    $("." + currentimedmcq + ".enabledimgtime .timedMcq-time").addClass("stoppedimgtimer");
+                }
 
                 if (this.model.get('_timedimgEnabled') && this.model.get('_graphic').src ) {
                     if (timedimg_height == 0) {
@@ -300,7 +305,7 @@ define(function(require) {
                     $("." + currentimedmcq + ".enabledimgtime .buttons").css("visibility","visible");
                     $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-start").addClass("display-none");
                     $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-instruction").css({"visibility":"visible","opacity":"1"}).addClass("started");
-                    $("." + currentimedmcq + ".enabledimgtime .timedMcq-time").removeClass("display-none").removeClass("started");
+                    $("." + currentimedmcq + ".enabledimgtime .timedMcq-time").addClass("display-none").removeClass("started");
                     $("." + currentimedmcq + ".enabledimgtime .aria-instruct").addClass("display-none");
                 }
             } else if ( this.$( ".timedMcq-time" ).text() == "0" ) {
