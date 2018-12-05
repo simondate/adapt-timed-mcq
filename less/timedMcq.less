@@ -66,9 +66,26 @@
         }
         &.imgcounton {
             visibility: visible;
+            cursor: default;
             opacity: 1;
             z-index: 20;
             transition: visibility 0s 0.5s, opacity 0.5s linear;
+        }
+        &.stoppedimgtimer {
+            cursor: pointer;
+            visibility: visible;
+            z-index: 20;
+            &:hover {
+                background-color:@item-color-selected;
+            }
+            &:before {
+                content: 'Start\ATimer';
+                display: block;
+                max-width: 60px;
+                text-align: center;
+                margin-bottom: 10px;
+                margin-top: -10px;
+            }
         }
     }
 
@@ -275,6 +292,32 @@
             color:@validation-error;
         }
     }
+
+    &.timed2column {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        align-items: center;
+
+        .timedMcq-item {
+            width: 48.5%;
+            margin-top: 1%;
+        }
+
+    }
+
+    &.timed3column {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        align-items: center;
+
+        .timedMcq-item {
+            width: 31.3%;
+            margin-top: 1%;
+        }
+
+    }
     
 }
 
@@ -319,16 +362,34 @@
         visibility: visible !important;
         .timedMcq-item{
             label{
-                cursor: default !important;
+                cursor: default;
             }
         }
     }
     .buttons {
         visibility: visible !important;
         .buttons-action {
-            background-color: @disabled-color !important;
-            border-color: @disabled-color !important;
-            cursor: default !important;
+            background-color: @disabled-color;
+            border-color: @disabled-color;
+            cursor: default;
+        }
+    }
+}
+.notimenabled {
+    .timedMcq-widget{
+        visibility: visible !important;
+        .timedMcq-item{
+            label{
+                cursor: pointer;
+            }
+        }
+    }
+    .buttons {
+        visibility: visible !important;
+        .buttons-action {
+            background-color: @button-color;
+            border-color: @button-color;
+            cursor: pointer;
         }
     }
 }
@@ -342,7 +403,7 @@
 }
 .embedimgtimeup {
     .timedMcq-inner {
-        height: auto !important;
+        min-height: auto !important;
     }
     .timedMcq-time-start {
         display: none !important;
@@ -354,6 +415,7 @@
     .imgcounton {
         visibility: hidden !important;
         opacity: 0 !important;
+        cursor: default;
     }
     .buttons {
         visibility: visible !important;
@@ -370,10 +432,53 @@
 }
 
 @media all and (max-width:@device-width-medium){
+    .timedMcq-widget {
+        &.timed2column {
+            .timedMcq-item {
+                width: 48.5%;
+            }
+
+        }
+
+        &.timed3column {
+            .timedMcq-item {
+                width: 48.5%;
+            }
+
+        }
+    }
     .component-left .timedMcq-time-start, .component-right .timedMcq-time-start {
        width: calc(~'100% - 40px') !important;
         right: 0;
         left: 20px;
     }
     .component-left .timedMcq-time {margin-right: 0%;}
+}
+
+@media all and (max-width:@device-width-small){
+    .timedMcq-widget {
+        &.timed2column {
+            display: inherit;
+            flex-wrap: inherit;
+            justify-content: inherit;
+            align-items: inherit;
+            .timedMcq-item {
+                width: inherit;
+                margin-top: inherit;
+            }
+
+        }
+
+        &.timed3column {
+            display: inherit;
+            flex-wrap: inherit;
+            justify-content: inherit;
+            align-items: inherit;
+            .timedMcq-item {
+                width: inherit;
+                margin-top: inherit;
+            }
+
+        }
+    }
 }
