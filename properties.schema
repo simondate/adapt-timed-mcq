@@ -175,8 +175,8 @@
         "_itemscolumnnum": {
           "type": "string",
           "required": true,
-          "enum": ["1", "2", "3"],
-          "inputType": {"type": "Select", "options": ["1", "2", "3"]},
+          "enum": ["1", "2", "3", "4"],
+          "inputType": {"type": "Select", "options": ["1", "2", "3", "4"]},
           "title": "Select the Number of Item Columns",
           "default": "1",
           "validators": ["required"],
