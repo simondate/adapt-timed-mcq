@@ -228,7 +228,7 @@ define(function(require) {
             this.setAllItemsEnabled(true);
         },
 
-        timeUp(){
+        timeUp: function(){
             var currentimedmcq = this.model.get('_id');
 
             if (  $("." + currentimedmcq + ".timedMcq-component").hasClass( "embedimgtimeup" ) ) {
