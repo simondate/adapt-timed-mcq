@@ -233,6 +233,15 @@
             "required": true,
             "title": "Feedback",
             "properties": {
+                "_showmyScore": {
+                  "type": "boolean",
+                  "required":true,
+                  "default": false,
+                  "title": "Display users score in Feedback",
+                  "inputType": { "type": "Boolean", "options": [false, true]},
+                  "validators": [],
+                  "help": "Set to true to display the users score within the feedback."
+                },
                 "correct": {
                     "type": "string",
                     "required": true,
