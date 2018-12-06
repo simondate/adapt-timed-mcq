@@ -399,7 +399,7 @@ define(function(require) {
             }, this);
 
             $(".timedMcq-time-start").removeClass("disabled").prop("disabled", false); //THIS UNLOCKES OTHER QUESTIONS
-            
+         
             return (count >= 0) ? true : false;
 
         },
@@ -422,8 +422,6 @@ define(function(require) {
                 userAnswer.push(item._isSelected);
             }, this);
             this.model.set('_userAnswer', userAnswer);
-
-
         },
 
         isCorrect: function() {
@@ -461,6 +459,67 @@ define(function(require) {
             return answeredCorrectly;
         },
 
+        mycorrectScoring: function() {
+            var numberOfCorrectAnswers = this.model.get("_numberOfCorrectAnswers");
+            var numberOfRequiredAnswers = this.model.get("_numberOfRequiredAnswers");
+            var toshowScore = this.model.get("_feedback")._showmyScore;
+            var rightoScore = this.model.get("_feedback").correct;
+
+            if (toshowScore == true) {
+                this.model.set({
+                    feedbackMessage: rightoScore + "<div class='scoreoutof'><p>You selected <span class='leavemyscore'>" + numberOfCorrectAnswers + "/" + numberOfRequiredAnswers + "</span> answers correctly.</p></div>"
+                });
+            } else {
+                //DO NOTHING
+            }
+
+        },
+        mypartlyScoring: function() {
+            var numberOfCorrectAnswers = this.model.get("_numberOfCorrectAnswers");
+            var numberOfRequiredAnswers = this.model.get("_numberOfRequiredAnswers");
+            var toshowScore = this.model.get("_feedback")._showmyScore;
+            var partlyScore = this.model.get("_feedback")._partlyCorrect.final;
+
+            if (toshowScore == true) {
+                this.model.set({
+                    feedbackMessage: partlyScore + "<div class='scoreoutof'><p>You selected <span class='leavemyscore'>" + numberOfCorrectAnswers + "/" + numberOfRequiredAnswers + "</span> answers correctly.</p></div>"
+                });
+            } else {
+                //DO NOTHING
+            }
+
+        },
+        myincorrectScoring: function() {
+            var numberOfCorrectAnswers = this.model.get("_numberOfCorrectAnswers");
+            var numberOfRequiredAnswers = this.model.get("_numberOfRequiredAnswers");
+            var toshowScore = this.model.get("_feedback")._showmyScore;
+            var wrongoScore = this.model.get("_feedback")._incorrect.final;
+
+            if (toshowScore == true) {
+                this.model.set({
+                    feedbackMessage: wrongoScore + "<div class='scoreoutof'><p>You selected <span class='leavemyscore'>" + numberOfCorrectAnswers + "/" + numberOfRequiredAnswers + "</span> answers correctly.</p></div>"
+                });
+            } else {
+                //DO NOTHING
+            }
+
+        },
+        myindividualScoring: function() {
+            var numberOfCorrectAnswers = this.model.get("_numberOfCorrectAnswers");
+            var numberOfRequiredAnswers = this.model.get("_numberOfRequiredAnswers");
+            var toshowScore = this.model.get("_feedback")._showmyScore;
+            var individualScore = this.model.get('_selectedItems')[0].feedback;
+
+            if (toshowScore == true) {
+                this.model.set({
+                    feedbackMessage: individualScore + "<div class='scoreoutof'><p>You selected <span class='leavemyscore'>" + numberOfCorrectAnswers + "/" + numberOfRequiredAnswers + "</span> answers correctly.</p></div>"
+                });
+            } else {
+                //DO NOTHING
+            }
+
+        },
+
         // Sets the score based upon the questionWeight
         // Can be overwritten if the question needs to set the score in a different way
         setScore: function() {
@@ -473,17 +532,17 @@ define(function(require) {
         setupFeedback: function() {
 
             if (this.model.get('_isCorrect')) {
-                this.setupCorrectFeedback();
+                this.setupCorrectFeedback() + this.mycorrectScoring();
             } else if (this.isPartlyCorrect()) {
-                this.setupPartlyCorrectFeedback();
+                this.setupPartlyCorrectFeedback() + this.mypartlyScoring();
             } 
              else {
                 // apply individual item feedback
                 if((this.model.get('_selectable') === 1) && this.model.get('_selectedItems')[0].feedback) {
-                    this.setupIndividualFeedback(this.model.get('_selectedItems')[0]);
+                    this.setupIndividualFeedback(this.model.get('_selectedItems')[0]) + this.myindividualScoring();
                     return;
                 } else {
-                    this.setupIncorrectFeedback();
+                    this.setupIncorrectFeedback() + this.myincorrectScoring();
                 }
             }
             $(".enabledimgtime .timedMcq-time-start").addClass("disabled").prop("disabled", true);//THIS LOCKES TIMED IMAGE QUESTIONS
