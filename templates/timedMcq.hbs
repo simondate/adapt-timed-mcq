@@ -10,7 +10,7 @@
 
         <div class="timedMcq-time-instruction">{{ timeInstruction }}</div>
         
-        <button class="timedMcq-time-start" {{#if _timedimgEnabled}}style="background: url({{_graphic.src}}); background-repeat:no-repeat; background-size: cover; background-position: center;"{{else}} {{/if}} >{{#if _timedimgEnabled}} <img src="{{_graphic.src}}" style="display:none;" tabindex="-1" /> {{_graphic.alt}} {{else}} {{ _timerReveal }} {{/if}}</button>
+        <button class="timedMcq-time-start" {{#if _timedimgEnabled}}style="background: url({{_graphic.src}}); background-repeat:no-repeat; background-size: contain; background-position: top center;"{{else}} {{/if}} >{{#if _timedimgEnabled}} <img src="{{_graphic.src}}" style="display:none;" tabindex="-1" /> {{_graphic.alt}} {{else}} {{ _timerReveal }} {{/if}}</button>
 
         <div class="timedMcq-body-items">
             {{#if body}}
