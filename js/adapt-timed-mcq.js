@@ -91,13 +91,13 @@ define(function(require) {
             if (visible) {
                 if (visiblePartY === 'top') {
                     this._isVisibleTop = true;
+                    this.stopTimer2();
+                    this.setupInitialimgTimer();
                 } else if (visiblePartY === 'bottom') {
                     this._isVisibleBottom = true;
                 } else {
                     this._isVisibleTop = true;
                     this._isVisibleBottom = true;
-                    this.stopTimer2();
-                    this.setupInitialimgTimer();
                 }
 
                 if (this._isVisibleTop && this._isVisibleBottom) {
