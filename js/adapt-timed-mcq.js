@@ -200,6 +200,11 @@ define(function(require) {
             var selectedItems = [];
             var items = this.model.get("_items");
             var userAnswer = this.model.get("_userAnswer");
+
+            var themcqtotalscore = parseFloat(this.model.get("_themcqtotalscore"));
+            var therequiredscore = parseFloat(this.model.get("_therequiredscore"));
+            var outofahundred = parseFloat(this.model.get("_outofahundred"));
+
             _.each(items, function(item, index) {
                 item._isSelected = userAnswer[item._index];
                 if (item._isSelected) {
@@ -263,6 +268,11 @@ define(function(require) {
 
             var seconds = this.model.get("_seconds");
             var currentimedmcq = this.model.get('_id');
+
+            var percentageBar = this.model.get("_showPercentagebar");
+            if (percentageBar == true) {
+                $(".timedMcq-component").addClass("mcqscoringpercent");
+            }
             
             
             if (this.model.get('_timedimgEnabled') && this.model.get('_isEnabled')) {
@@ -459,6 +469,57 @@ define(function(require) {
             return answeredCorrectly;
         },
 
+        _setupLinkedModel: function() {
+            
+            var currentimedmcq = this.model.get('_id');
+            var numberOfCorrectAnswers = this.model.get("_numberOfCorrectAnswers");
+            var numberOfRequiredAnswers = this.model.get("_numberOfRequiredAnswers");
+            var toshowScore = this.model.get("_feedback")._showmyScore;
+            var percentageBar = this.model.get("_showPercentagebar");
+            var percentBartxt = this.model.get("_showPercenttext");
+            var themcqtotalscore = parseFloat(this.model.get("_themcqtotalscore"));
+            var therequiredscore = parseFloat(this.model.get("_therequiredscore"));
+            var mypercentcount = parseFloat($(".mcqscoringpercent").length);
+            var myscorecount = parseFloat($('.mcqscoringaddup').length)+1;
+            var outofahundred = parseFloat(this.model.get("_outofahundred"));
+            var myarticleis = this.$el.parents('.article');
+            var myarticleId = myarticleis.attr("data-adapt-id");
+            
+            if (toshowScore == true) {
+                $("." + myarticleId + " .timedMcq-component."+currentimedmcq).addClass("mcqscoringaddup");
+                $('.' + myarticleId + ' .mcqscoringaddup.'+currentimedmcq+' .masterscorehold .mymcqtotalscore').text(numberOfCorrectAnswers);
+                $('.' + myarticleId + ' .mcqscoringaddup .mymcqtotalscore').each(function() {
+                    themcqtotalscore += parseFloat($(this).text());
+                });
+
+                console.log("Total MCQ score is now: " + themcqtotalscore);
+            }
+
+            if (percentageBar == true) {
+                $('.' + myarticleId + ' .mcqscoringaddup.' + currentimedmcq + ' .masterscorehold .mymcqrequiredscore').text(numberOfRequiredAnswers);
+                $('.' + myarticleId + ' .mcqscoringaddup .mymcqrequiredscore').each(function() {
+                    therequiredscore += parseFloat($(this).text());
+                });
+
+                var outofahundred = themcqtotalscore / therequiredscore * 100;
+
+                window.setTimeout(function(){
+                    $('.' + myarticleId + ' .mcqscoringaddup.' + currentimedmcq + ' .masterscorehold .mcqmovingbar').css("width", outofahundred.toFixed(2)+"%").html("&nbsp;<span>" + percentBartxt + "</span> " + outofahundred.toFixed(2) + "%").attr("aria-label", percentBartxt + outofahundred.toFixed(2) + "%");
+                    $("." + myarticleId + " .assessmentResults-instruction-inner").html("<p class='yourachievement1' style='font-size: 125%'>Your Overall Score is <span class='leavemyscore'>" + outofahundred.toFixed(2) + "%</span></p><p class='yourachievement2' style='font-size: 125%'>You selected <span class='leavemyscore'>" + themcqtotalscore + "/" + therequiredscore + "</span> answers correctly.</p>");
+                 }, 777);
+
+                if (myscorecount == mypercentcount) {
+                    this.model.set('_themcqtotalscore', themcqtotalscore);
+                    this.model.set('_therequiredscore', therequiredscore);
+                    this.model.set('_outofahundred', outofahundred);
+                }
+
+                console.log("The Require Total MCQ score is: " + therequiredscore);
+                console.log("Percentage MCQ score is: " + outofahundred.toFixed(2));
+            }
+
+        },
+
         mycorrectScoring: function() {
             var numberOfCorrectAnswers = this.model.get("_numberOfCorrectAnswers");
             var numberOfRequiredAnswers = this.model.get("_numberOfRequiredAnswers");
@@ -546,6 +607,7 @@ define(function(require) {
                 }
             }
             $(".enabledimgtime .timedMcq-time-start").addClass("disabled").prop("disabled", true);//THIS LOCKES TIMED IMAGE QUESTIONS
+            this._setupLinkedModel();
         },
 
         setupTimeUpFeedback: function() {
