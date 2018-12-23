@@ -454,6 +454,58 @@ span.leavemyscore {
     font-weight: bold;
 }
 
+/* SCORE MCQ BAR AT BOTTOM STYLES */
+.masterscorehold {display:none;}
+.mcqscoringaddup {
+    .masterscorehold {
+        background-color: darken(@item-color, 20%) !important;
+        border-radius: 0 !important;
+        border: 1px solid @white;
+        height: 20px !important;
+        line-height: 20px;
+        position: relative;
+        display: block;
+        width: calc(~'100% - 2px');
+        margin-top: 10px;
+        overflow: hidden;
+        -webkit-transition: background-color .25s ease-in,color .25s ease-in,border-color .25s ease-in;
+        -moz-transition: background-color .25s ease-in,color .25s ease-in,border-color .25s ease-in;
+        -ms-transition: background-color .25s ease-in,color .25s ease-in,border-color .25s ease-in;
+        transition: background-color .25s ease-in,color .25s ease-in,border-color .25s ease-in;
+    }
+
+    .mcqmovingbar {
+        -webkit-border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
+        -ms-border-radius: 0 !important;
+        -o-border-radius: 0 !important;
+        border-radius: 0 !important;
+        border: 0 solid @item-color !important;
+        border-right: 1px solid rgba(255,255,255,0.5) !important;
+        background-color: @item-color !important;
+        color: @item-text-color;
+        background-repeat: repeat-x !important;
+        background-size: 30px 30px !important;
+        width: 0%;
+        min-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        -webkit-animation: progress 1.5s linear infinite !important;
+        -moz-animation: progress 1.5s linear infinite !important;
+        animation: progress 1.5s linear infinite !important;
+        -webkit-transition: width 1s ease-out !important;
+        -moz-transition: width 1s ease-out !important;
+        -ms-transition: width 1s ease-out !important;
+        -o-transition: width 1s ease-out !important;
+        transition: width 1s ease-out !important;
+    }
+}
+
 @media all and (max-width:@device-width-medium){
     .timedMcq-widget {
         &.timed2column {
@@ -483,6 +535,7 @@ span.leavemyscore {
         left: 20px;
     }
     .component-left .timedMcq-time {margin-right: 0%;}
+    .mcqscoringaddup .mcqmovingbar span {display:none !important;}
 }
 
 @media all and (max-width:@device-width-small){
