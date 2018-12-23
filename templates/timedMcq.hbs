@@ -52,3 +52,10 @@
     <div class="buttons" id="buttons">
     </div>
 </div>
+{{#if _showPercentagebar}}
+<div class="masterscorehold">
+    <div class="mcqmovingbar" style="width: {{_outofahundred}}%;" aria-label="{{_showPercenttext}} {{_outofahundred}}%">&nbsp;<span>{{_showPercenttext}}</span> {{_outofahundred}}%</div>
+    <div class="mymcqtotalscore" style="display:none">{{_themcqtotalscore}}</div>
+    <div class="mymcqrequiredscore" style="display:none">{{_therequiredscore}}</div>
+</div>
+{{/if}}
