@@ -172,6 +172,48 @@
             ],
             "help": "How many items are selectable"
         },
+        "_showPercentagebar": {
+          "type": "boolean",
+          "required":true,
+          "default": false,
+          "title": "Display score in a percentage bar",
+          "inputType": { "type": "Boolean", "options": [false, true]},
+          "validators": [],
+          "help": "Set to true to display the users score as a percentage bar."
+        },
+        "_showPercenttext": {
+          "type":"string",
+          "required": false,
+          "default": "Overall Score:",
+          "title": "Percentage Bar Description Text",
+          "inputType": "Text",
+          "validators": [],
+          "help": "Text that shows up in the progress bar at the bottom of the component before the percentage score."
+        },
+        "_themcqtotalscore": {
+          "type": "hidden",
+          "required": false,
+          "default": "0",
+          "title": "Total Correct Score",
+          "inputType": "Hidden",
+          "validators": []            
+        },
+        "_therequiredscore": {
+          "type": "hidden",
+          "required": false,
+          "default": "0",
+          "title": "Total Required Correct Answers",
+          "inputType": "Hidden",
+          "validators": []            
+        },
+        "_outofahundred": {
+          "type": "hidden",
+          "required": false,
+          "default": "0",
+          "title": "Percentage of Overall Score",
+          "inputType": "Hidden",
+          "validators": []            
+        },
         "_itemscolumnnum": {
           "type": "string",
           "required": true,
