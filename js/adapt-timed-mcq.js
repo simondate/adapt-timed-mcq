@@ -341,6 +341,23 @@ define(function(require) {
                 $("." + currentimedmcq + ".timeuplock .timedMcq-time-instruction").addClass("started");
                 $("." + currentimedmcq + ".timeuplock .aria-instruct").removeClass("display-none");
             }
+
+            if (this.model.get('_isSubmitted') && this.model.has('_userAnswer')) {
+                
+                var currentimedmcq = this.model.get('_id');
+                var myarticleis = this.$el.parents('.article');
+                var myarticleId = myarticleis.attr("data-adapt-id");
+                var percentBartxt = this.model.get("_showPercenttext");
+                var themcqtotalscore2 = parseFloat($('.' + myarticleId + ' .masterscorehold .mymcqtotalscore').text());
+                var therequiredscore2 = parseFloat($('.' + myarticleId + ' .masterscorehold .mymcqrequiredscore').text());
+                var outofahundred2 = themcqtotalscore2 / therequiredscore2 * 100;
+
+                window.setTimeout(function(){
+                    $('.' + myarticleId + ' .mcqscoringaddup.' + currentimedmcq + ' .masterscorehold .mcqmovingbar').css("width", outofahundred2.toFixed(2)+"%").html("&nbsp;<span>" + percentBartxt + "</span> " + outofahundred2.toFixed(2) + "%").attr("aria-label", percentBartxt + outofahundred2.toFixed(2) + "%");
+                    $("." + myarticleId + " .assessmentResults-instruction-inner").html("<p class='yourachievement1' style='font-size: 125%'>Your Overall Score is <span class='leavemyscore'>" + outofahundred2.toFixed(2) + "%</span></p><p class='yourachievement2' style='font-size: 125%'>You selected <span class='leavemyscore'>" + themcqtotalscore2 + "/" + therequiredscore2 + "</span> answers correctly.</p>");
+                 }, 878);
+            }
+
         },
 
         onKeyPress: function(event) {
