@@ -304,7 +304,7 @@
                     "validators": [
                         "required"
                     ],
-                    "help": "Correct feedback for this question"
+                    "help": "Time is up feedback for this question"
                 },
                 "_incorrect": {
                     "type": "object",
