@@ -50,7 +50,7 @@
         </div>
             {{#if feedback}}
                 <div class="specfdback-{{@index}} a11y-ignore" aria-hidden="true" tabindex="-1" style="display:none;">[ Above Item Specific Feedback ] = {{{feedback}}}</div>
-                <script>if ( !$('html').hasClass('pagesave2txt') ) { $( ".specfdback-{{@index}}" ).remove(); }</script>
+                <script class="specfdback-{{@index}}">if ( !$('html').hasClass('pagesave2txt') ) { $( ".specfdback-{{@index}}" ).remove(); }</script>
             {{/if}}
         {{/each}}
     </div>
@@ -74,7 +74,7 @@
     {{#if _feedback._partlyCorrect.notFinal}}
         <div class="{{_id}}-fbnotify a11y-ignore" aria-hidden="true" tabindex="-1" style="display:none;">[ Partly Correct Not Final Feedback ] = {{{_feedback._partlyCorrect.notFinal}}}</div>
     {{/if}}
-    <script>if ( !$('html').hasClass('pagesave2txt') ) { $( ".{{_id}}-fbnotify" ).remove(); }</script>
+    <script class="{{_id}}-fbnotify">if ( !$('html').hasClass('pagesave2txt') ) { $( ".{{_id}}-fbnotify" ).remove(); }</script>
 </div>
 {{#if _showPercentagebar}}
 <div class="masterscorehold">
