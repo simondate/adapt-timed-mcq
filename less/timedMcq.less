@@ -505,6 +505,13 @@ span.leavemyscore {
         transition: width 1s ease-out !important;
     }
 }
+.component-left.mcqscoringaddup .masterscorehold {
+    width: calc(~'100% - 32px');
+}
+.component-right.mcqscoringaddup .masterscorehold {
+    width: calc(~'100% - 32px');
+    margin-left: 30px;
+}
 
 @media all and (max-width:@device-width-medium){
     .timedMcq-widget {
@@ -536,6 +543,7 @@ span.leavemyscore {
     }
     .component-left .timedMcq-time {margin-right: 0%;}
     .mcqscoringaddup .mcqmovingbar span {display:none !important;}
+    .component-left.mcqscoringaddup .masterscorehold, .component-right.mcqscoringaddup .masterscorehold {width: calc(~'100% - 2px');margin-left: 0px;}
 }
 
 @media all and (max-width:@device-width-small){
