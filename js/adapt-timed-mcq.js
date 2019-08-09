@@ -218,6 +218,27 @@ define(function(require) {
             this.markQuestion();
             this.setScore();
             this.showMarking();
+            
+            $(".timedMcq-component").addClass("mcqscoringpercent");
+            if (this.model.get('_isSubmitted') && this.model.has('_userAnswer')) {
+                
+                var currentimedmcq = this.model.get('_id');
+                var myarticleis = this.$el.parents('.article');
+                var myarticleId = myarticleis.attr("data-adapt-id");
+                var toshowScore = this.model.get("_feedback")._showmyScore;
+                var percentageBar = this.model.get("_showPercentagebar");
+                var percentBartxt = this.model.get("_showPercenttext");
+                var themcqtotalscore2 = parseFloat($('.' + myarticleId + ' .masterscorehold .mymcqtotalscore').text());
+                var therequiredscore2 = parseFloat($('.' + myarticleId + ' .masterscorehold .mymcqrequiredscore').text());
+                var outofahundred2 = themcqtotalscore2 / therequiredscore2 * 100;
+
+                if (toshowScore == true || percentageBar == true) {
+                    window.setTimeout(function(){
+                        $('.' + myarticleId + ' .mcqscoringaddup.' + currentimedmcq + ' .masterscorehold .mcqmovingbar').css("width", outofahundred2.toFixed(2)+"%").html("&nbsp;<span>" + percentBartxt + "</span> " + outofahundred2.toFixed(2) + "%").attr("aria-label", percentBartxt + outofahundred2.toFixed(2) + "%");
+                        $("." + myarticleId + " .assessmentResults-instruction-inner").html("<p class='yourachievement1' style='font-size: 125%'>Your Overall Score is <span class='leavemyscore'>" + outofahundred2.toFixed(2) + "%</span></p><p class='yourachievement2' style='font-size: 125%'>You selected <span class='leavemyscore'>" + themcqtotalscore2 + "/" + therequiredscore2 + "</span> answers correctly.</p>");
+                     }, 878);
+                }
+            }
             this.setupFeedback();
         },
 
@@ -267,13 +288,7 @@ define(function(require) {
             this.setReadyStatus();
 
             var seconds = this.model.get("_seconds");
-            var currentimedmcq = this.model.get('_id');
-
-            var percentageBar = this.model.get("_showPercentagebar");
-            if (percentageBar == true) {
-                $(".timedMcq-component").addClass("mcqscoringpercent");
-            }
-            
+            var currentimedmcq = this.model.get('_id');            
             
             if (this.model.get('_timedimgEnabled') && this.model.get('_isEnabled')) {
                 $("." + currentimedmcq + ".timedMcq-component").addClass("enabledimgtime");
@@ -342,20 +357,25 @@ define(function(require) {
                 $("." + currentimedmcq + ".timeuplock .aria-instruct").removeClass("display-none");
             }
 
+            $(".timedMcq-component").addClass("mcqscoringpercent");
             if (this.model.get('_isSubmitted') && this.model.has('_userAnswer')) {
                 
                 var currentimedmcq = this.model.get('_id');
                 var myarticleis = this.$el.parents('.article');
                 var myarticleId = myarticleis.attr("data-adapt-id");
+                var toshowScore = this.model.get("_feedback")._showmyScore;
+                var percentageBar = this.model.get("_showPercentagebar");
                 var percentBartxt = this.model.get("_showPercenttext");
                 var themcqtotalscore2 = parseFloat($('.' + myarticleId + ' .masterscorehold .mymcqtotalscore').text());
                 var therequiredscore2 = parseFloat($('.' + myarticleId + ' .masterscorehold .mymcqrequiredscore').text());
                 var outofahundred2 = themcqtotalscore2 / therequiredscore2 * 100;
 
-                window.setTimeout(function(){
-                    $('.' + myarticleId + ' .mcqscoringaddup.' + currentimedmcq + ' .masterscorehold .mcqmovingbar').css("width", outofahundred2.toFixed(2)+"%").html("&nbsp;<span>" + percentBartxt + "</span> " + outofahundred2.toFixed(2) + "%").attr("aria-label", percentBartxt + outofahundred2.toFixed(2) + "%");
-                    $("." + myarticleId + " .assessmentResults-instruction-inner").html("<p class='yourachievement1' style='font-size: 125%'>Your Overall Score is <span class='leavemyscore'>" + outofahundred2.toFixed(2) + "%</span></p><p class='yourachievement2' style='font-size: 125%'>You selected <span class='leavemyscore'>" + themcqtotalscore2 + "/" + therequiredscore2 + "</span> answers correctly.</p>");
-                 }, 878);
+                if (toshowScore == true || percentageBar == true) {
+                    window.setTimeout(function(){
+                        $('.' + myarticleId + ' .mcqscoringaddup.' + currentimedmcq + ' .masterscorehold .mcqmovingbar').css("width", outofahundred2.toFixed(2)+"%").html("&nbsp;<span>" + percentBartxt + "</span> " + outofahundred2.toFixed(2) + "%").attr("aria-label", percentBartxt + outofahundred2.toFixed(2) + "%");
+                        $("." + myarticleId + " .assessmentResults-instruction-inner").html("<p class='yourachievement1' style='font-size: 125%'>Your Overall Score is <span class='leavemyscore'>" + outofahundred2.toFixed(2) + "%</span></p><p class='yourachievement2' style='font-size: 125%'>You selected <span class='leavemyscore'>" + themcqtotalscore2 + "/" + therequiredscore2 + "</span> answers correctly.</p>");
+                     }, 878);
+                }
             }
 
         },
@@ -502,7 +522,7 @@ define(function(require) {
             var myarticleis = this.$el.parents('.article');
             var myarticleId = myarticleis.attr("data-adapt-id");
             
-            if (toshowScore == true) {
+            if (toshowScore == true || percentageBar == true) {
                 $("." + myarticleId + " .timedMcq-component."+currentimedmcq).addClass("mcqscoringaddup");
                 $('.' + myarticleId + ' .mcqscoringaddup.'+currentimedmcq+' .masterscorehold .mymcqtotalscore').text(numberOfCorrectAnswers);
                 $('.' + myarticleId + ' .mcqscoringaddup .mymcqtotalscore').each(function() {
@@ -510,9 +530,7 @@ define(function(require) {
                 });
 
                 console.log("Total MCQ score is now: " + themcqtotalscore);
-            }
 
-            if (percentageBar == true) {
                 $('.' + myarticleId + ' .mcqscoringaddup.' + currentimedmcq + ' .masterscorehold .mymcqrequiredscore').text(numberOfRequiredAnswers);
                 $('.' + myarticleId + ' .mcqscoringaddup .mymcqrequiredscore').each(function() {
                     therequiredscore += parseFloat($(this).text());
