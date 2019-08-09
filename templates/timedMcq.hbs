@@ -76,10 +76,9 @@
     {{/if}}
     <script class="{{_id}}-fbnotify">if ( !$('html').hasClass('pagesave2txt') ) { $( ".{{_id}}-fbnotify" ).remove(); }</script>
 </div>
-{{#if _showPercentagebar}}
-<div class="masterscorehold">
-    <div class="mcqmovingbar" style="width: {{_outofahundred}}%;" aria-label="{{_showPercenttext}} {{_outofahundred}}%">&nbsp;<span>{{_showPercenttext}}</span> {{_outofahundred}}%</div>
+
+<div class="masterscorehold" style="{{#if _showPercentagebar}}{{else}}display:none;{{/if}}">
+    <div class="mcqmovingbar" style="width: {{_outofahundred}}%; {{#if _showPercentagebar}}{{else}}display:none;{{/if}}" aria-label="{{_showPercenttext}} {{_outofahundred}}%">&nbsp;<span>{{_showPercenttext}}</span> {{_outofahundred}}%</div>
     <div class="mymcqtotalscore" style="display:none">{{_themcqtotalscore}}</div>
     <div class="mymcqrequiredscore" style="display:none">{{_therequiredscore}}</div>
 </div>
-{{/if}}
