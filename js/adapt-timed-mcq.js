@@ -2,14 +2,17 @@ define(function(require) {
     var QuestionView = require('coreViews/questionView');
     var Adapt = require('coreJS/adapt');
     var timer;
+    var timer2;
     var timedMcq = QuestionView.extend({
 
         events: {
+            'inview': 'inview',
             'focus .timedMcq-item input':'onItemFocus',
             'blur .timedMcq-item input':'onItemBlur',
             'change .timedMcq-item input':'onItemSelected',
             'keyup .timedMcq-item input':'onKeyPress',
-            'click .timedMcq-time-start' : 'startTimer'
+            'click .timedMcq-time-start' : 'startTimer',
+            'click .stoppedimgtimer' : 'setupInitialimgTimer'
         },
 
         resetQuestionOnRevisit: function() {
@@ -28,6 +31,7 @@ define(function(require) {
             this.setupRandomisation();
             
             this.restoreUserAnswers();
+
         },
 
         startTimer: function() {
@@ -42,17 +46,25 @@ define(function(require) {
             this.$(".timedMcq-widget").css("visibility","visible");
             this.$(".buttons").css("visibility","visible");
             this.$(".timedMcq-body-items").addClass("started");
-            this.$(".timedMcq-time-start").addClass("started").attr("disabled", true);
+            this.$(".timedMcq-time-start").addClass("started").prop("disabled", true);
             this.$(".timedMcq-time-instruction").addClass("started");
             this.$(".timedMcq-time").addClass("started");
-            $(".timedMcq-time-start").addClass('disabled').attr("disabled", true); //THIS LOCKES OTHER QUESTIONS UNTIL THIS ONE IS ANSWERED
+            this.$(".aria-instruct").removeClass("display-none");
+            this.$('.buttons-action').removeClass("disabled").prop("disabled", false);
+            $(".timedMcq-time-start").addClass("disabled").prop("disabled", true); //THIS LOCKES OTHER QUESTIONS UNTIL THIS ONE IS ANSWERED
         },
 
         checkTimeUp: function(){
-            if(this.model.get('_seconds') > 0) {
+            if(this.model.get('_seconds') > 0 ) {
                 return false;
             }else{
-            	$(".timedMcq-time-start").removeClass('disabled').removeAttr("disabled"); //THIS UNLOCKES OTHER QUESTIONS
+                if ( $(".timedMcq-component").hasClass( "enabledimgtime" ) && !$(".timedMcq-component").hasClass( "embedimgtimeup" ) ) {
+                    //don't do anything
+                    $(".timedMcq-time-start").addClass("disabled").prop("disabled", true); //THIS LOCKES IMAGE TIMED QUESTIONS
+                } else {
+                    $(".timedMcq-time-start").removeClass("disabled").prop("disabled", false); //THIS UNLOCKES OTHER QUESTIONS
+                    this.$( '.timedMcq-time' ).attr("tabindex","0").attr("aria-label","time left to answer 0 seconds").text( '0' );
+                }
             }
             return true;
         },
@@ -61,16 +73,69 @@ define(function(require) {
             clearInterval(timer);
         },
 
+        stopTimer2: function(){
+            $(".enabledimgtime .imgcounton").addClass("stoppedimgtimer");
+            clearInterval(timer2);
+        },
+
         decreaseTime: function(){
             var seconds = this.model.get("_seconds");
             this.model.set("_seconds", --seconds);
             this.$(".timedMcq-time").attr("tabindex","0").attr("aria-label","time left to answer "+seconds+" seconds").text(seconds); //Made the timer accessible
             if(this.checkTimeUp()) {
-                this.$("input").trigger( "click" ),
-                this.$(".buttons button.buttons-action").trigger( "click" ),
-                $(".notify button.notify-popup-done").trigger( "click" ),
-                this.disableQuestion(); //ADDED 3 LINES ABOVE IN FOR ASSESSMENT SO IT CAN BE RESET
-            }  
+                this.disableQuestion(); 
+            }
+        },
+
+        inview: function(event, visible, visiblePartX, visiblePartY) {
+            if (visible) {
+                if (visiblePartY === 'top') {
+                    this._isVisibleTop = true;
+                    this.stopTimer2();
+                    this.setupInitialimgTimer();
+                } else if (visiblePartY === 'bottom') {
+                    this._isVisibleBottom = true;
+                } else {
+                    this._isVisibleTop = true;
+                    this._isVisibleBottom = true;
+                }
+
+                if (this._isVisibleTop && this._isVisibleBottom) {
+                    this.$('.component-widget').off('inview');
+                }
+
+            }
+        },
+
+        decreaseTime2: function(setupInView){
+            var seconds = this.model.get("_seconds");
+            var currentimedmcq = this.model.get('_id');
+
+            $("." + currentimedmcq + ".enabledimgtime .timedMcq-time").addClass("imgcounton");
+            $("." + currentimedmcq + ".enabledimgtime .timedMcq-widget").css("visibility","visible");
+            $(".enabledimgtime .timedMcq-body-items").removeClass("started");
+            $(".enabledimgtime .timedMcq-time-start").removeClass("started").prop("disabled", false);
+            $(".enabledimgtime .timedMcq-time-instruction").removeClass("started");
+            $(".enabledimgtime .timedMcq-time").removeClass("display-none").removeClass("started");
+            $(".enabledimgtime .aria-instruct").addClass("display-none");
+            $(".enabledimgtime .timedMcq-time-start").addClass("disabled").prop("disabled", true); //THIS LOCKES OTHER QUESTIONS UNTIL THIS ONE IS ANSWERED  
+
+            this.model.set("_seconds", --seconds);
+            $("." + currentimedmcq + " .timedMcq-time").attr("tabindex","0").attr("aria-label","time left to answer "+seconds+" seconds").text(seconds); //Made the timer accessible 
+            if (seconds <= 0) {
+                // On Countdown finish do this
+               this.stopTimer2();
+                $("." + currentimedmcq + ".timedMcq-component").addClass("embedimgtimeup");
+                $("." + currentimedmcq + ".embedimgtimeup .timedMcq-widget").css("visibility","visible");
+                $("." + currentimedmcq + ".embedimgtimeup .timedMcq-body-items").addClass("started");
+                $("." + currentimedmcq + ".embedimgtimeup .timedMcq-time-start").addClass("started").prop("disabled", true);
+                $("." + currentimedmcq + ".embedimgtimeup .timedMcq-time-instruction").addClass("started");
+                $("." + currentimedmcq + ".embedimgtimeup .timedMcq-time").addClass("display-none").addClass("started").text( "0" );
+                $("." + currentimedmcq + ".embedimgtimeup .aria-instruct").removeClass("display-none");
+                $("." + currentimedmcq + ".embedimgtimeup .buttons-action").removeClass("disabled").prop("disabled", false);
+                $("." + currentimedmcq + ".embedimgtimeup .timedMcq-item input").removeClass("disabled").prop("disabled", false);
+                $(".enabledimgtime .timedMcq-time-start").addClass("disabled").prop("disabled", true);//THIS LOCKES TIMED IMAGE QUESTIONS
+            }
         },
 
         setupQuestionItemIndexes: function() {
@@ -86,12 +151,60 @@ define(function(require) {
             }
         },
 
+        setupInitialimgTimer: function() {
+
+            if (this.model.get('_timedimgEnabled') && this.model.get('_isEnabled')) {
+                
+                var currentimedmcq = this.model.get('_id');
+                var seconds = this.model.get("_seconds");
+                var timedimg_height = $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-start img").height(); // Get my img height
+
+                if (seconds <= 0) {
+                    $(".enabledimgtime .timedMcq-time").removeClass("stoppedimgtimer");
+                } else {
+                    $("." + currentimedmcq + ".enabledimgtime .timedMcq-time").addClass("stoppedimgtimer");
+                }
+
+                if (this.model.get('_timedimgEnabled') && this.model.get('_graphic').src ) {
+                    if (timedimg_height == 0) {
+                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("min-height", "");
+                    } else {
+                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("min-height", timedimg_height+"px");
+                    }
+                }
+
+                if (  $("." + currentimedmcq + " .timedMcq-widget").hasClass( "submitted" ) || $("." + currentimedmcq + " .timedMcq-widget").hasClass( "complete" ) ) {
+                    
+                    $("." + currentimedmcq + " .timedMcq-time" ).addClass("display-none").addClass("started").attr("tabindex","0").attr("aria-label","time left to answer 0 seconds").text( "0" );
+                    $(".embedimgtimeup .timedMcq-time-start").removeClass("disabled").prop("disabled", false); //UNLOCKS FOR TIMED IMAGE COMPLETE
+                
+                    this.decreaseTime2();
+
+                } else {
+                    
+                    parent2 = this
+                    timer2 = setInterval(
+                            function(){ parent2.decreaseTime2(); $("." + currentimedmcq + ".enabledimgtime .imgcounton").removeClass("stoppedimgtimer"); } , 1000
+                    );
+                }
+
+            } else {
+                 //NOT Timed image
+            }
+            
+        },
+
         restoreUserAnswers: function() {
             if (!this.model.get("_isSubmitted")) return;
 
             var selectedItems = [];
             var items = this.model.get("_items");
             var userAnswer = this.model.get("_userAnswer");
+
+            var themcqtotalscore = parseFloat(this.model.get("_themcqtotalscore"));
+            var therequiredscore = parseFloat(this.model.get("_therequiredscore"));
+            var outofahundred = parseFloat(this.model.get("_outofahundred"));
+
             _.each(items, function(item, index) {
                 item._isSelected = userAnswer[item._index];
                 if (item._isSelected) {
@@ -105,6 +218,27 @@ define(function(require) {
             this.markQuestion();
             this.setScore();
             this.showMarking();
+            
+            $(".timedMcq-component").addClass("mcqscoringpercent");
+            if (this.model.get('_isSubmitted') && this.model.has('_userAnswer')) {
+                
+                var currentimedmcq = this.model.get('_id');
+                var myarticleis = this.$el.parents('.article');
+                var myarticleId = myarticleis.attr("data-adapt-id");
+                var toshowScore = this.model.get("_feedback")._showmyScore;
+                var percentageBar = this.model.get("_showPercentagebar");
+                var percentBartxt = this.model.get("_showPercenttext");
+                var themcqtotalscore2 = parseFloat($('.' + myarticleId + ' .masterscorehold .mymcqtotalscore').text());
+                var therequiredscore2 = parseFloat($('.' + myarticleId + ' .masterscorehold .mymcqrequiredscore').text());
+                var outofahundred2 = themcqtotalscore2 / therequiredscore2 * 100;
+
+                if (toshowScore == true || percentageBar == true) {
+                    window.setTimeout(function(){
+                        $('.' + myarticleId + ' .mcqscoringaddup.' + currentimedmcq + ' .masterscorehold .mcqmovingbar').css("width", outofahundred2.toFixed(2)+"%").html("&nbsp;<span>" + percentBartxt + "</span> " + outofahundred2.toFixed(2) + "%").attr("aria-label", percentBartxt + outofahundred2.toFixed(2) + "%");
+                        $("." + myarticleId + " .assessmentResults-instruction-inner").html("<p class='yourachievement1' style='font-size: 125%'>Your Overall Score is <span class='leavemyscore'>" + outofahundred2.toFixed(2) + "%</span></p><p class='yourachievement2' style='font-size: 125%'>You selected <span class='leavemyscore'>" + themcqtotalscore2 + "/" + therequiredscore2 + "</span> answers correctly.</p>");
+                     }, 878);
+                }
+            }
             this.setupFeedback();
         },
 
@@ -120,13 +254,19 @@ define(function(require) {
             this.setAllItemsEnabled(true);
         },
 
-        timeUp(){
-            this.setupTimeUpFeedback();
-            this.model.set('_isCorrect', false);
-            this.$('.buttons-action').prop('disabled', true);
-            this.showMarking();
-            Adapt.trigger('questionView:showFeedback', this);
-            this.updateButtons();
+        timeUp: function(){
+            var currentimedmcq = this.model.get('_id');
+
+            if (  $("." + currentimedmcq + ".timedMcq-component").hasClass( "embedimgtimeup" ) ) {
+                $("." + currentimedmcq + ".embedimgtimeup .buttons-action").removeClass("disabled").prop("disabled", false);
+            } else {
+                this.setupTimeUpFeedback();
+                this.model.set('_isCorrect', false);
+                $("." + currentimedmcq + ".timedMcq-component .buttons-action").prop("disabled", true);
+                this.showMarking();
+                Adapt.trigger('questionView:showFeedback', this);
+                this.updateButtons();
+            }
         },
 
         setAllItemsEnabled: function(isEnabled) {
@@ -146,6 +286,98 @@ define(function(require) {
 
         onQuestionRendered: function() {
             this.setReadyStatus();
+
+            var seconds = this.model.get("_seconds");
+            var currentimedmcq = this.model.get('_id');            
+            
+            if (this.model.get('_timedimgEnabled') && this.model.get('_isEnabled')) {
+                $("." + currentimedmcq + ".timedMcq-component").addClass("enabledimgtime");
+                $(".enabledimgtime .timedMcq-time-start").addClass("disabled").prop("disabled", true); //LOCKS ALL TIMED IMAGES
+
+                var timedimg_height = $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-start img").height(); // Get my img height
+
+                if (this.model.get('_timedimgEnabled') && this.model.get('_graphic').src ) {
+                    if (timedimg_height == 0) {
+                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("min-height", "");
+                    } else {
+                        $("." + currentimedmcq + ".enabledimgtime .timedMcq-inner").css("min-height", timedimg_height+"px");
+                    }
+                }
+            }
+
+            if (  this.$(".timedMcq-widget").hasClass( "submitted" ) || this.$(".timedMcq-widget").hasClass( "complete" ) ) {
+                
+                this.$( '.timedMcq-time' ).attr("tabindex","0").attr("aria-label","time left to answer 0 seconds").text( '0' );
+                
+                window.setTimeout(function(){
+                    this.$( ".embedimgtimeup .timedMcq-widget").css("visibility","visible");
+                    this.$( ".embedimgtimeup .buttons").css("visibility","visible");
+                    this.$( ".embedimgtimeup .timedMcq-body-items").addClass("started");
+                    this.$( ".embedimgtimeup .timedMcq-time-start").addClass("started").prop("disabled", true);
+                    this.$( ".embedimgtimeup .timedMcq-time-instruction").addClass("started");
+                    this.$( ".embedimgtimeup .timedMcq-time").addClass("display-none").addClass("started").text( "0" );
+                    this.$( ".embedimgtimeup .aria-instruct").removeClass("display-none");
+                    this.$( ".embedimgtimeup .buttons-action").removeClass("disabled").prop("disabled", false);
+                    this.$( ".embedimgtimeup .timedMcq-item input").removeClass("disabled").prop("disabled", false);
+                }, 233);
+            }
+
+            //BELOW DISPLAYS ANSWERS OR TIME UP RESPONSE ON REVISIT
+            if ( $("." + currentimedmcq + ".timedMcq-component").hasClass( "enabledimgtime" ) ) {
+                if (seconds <= 0) {
+                    $("." + currentimedmcq + ".enabledimgtime .timedMcq-widget").css("visibility","visible");
+                    $("." + currentimedmcq + ".enabledimgtime .timedMcq-body-items").css({"visibility":"visible","opacity":"1"}).addClass("started");
+                    $("." + currentimedmcq + ".enabledimgtime .buttons").css("visibility","visible");
+                    $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-start").addClass("display-none");
+                    $("." + currentimedmcq + ".enabledimgtime .timedMcq-time-instruction").css({"visibility":"visible","opacity":"1"}).addClass("started");
+                    $("." + currentimedmcq + ".enabledimgtime .timedMcq-time").addClass("display-none").removeClass("started");
+                    $("." + currentimedmcq + ".enabledimgtime .aria-instruct").addClass("display-none");
+                }
+            } else if ( this.$( ".timedMcq-time" ).text() == "0" ) {
+                $("." + currentimedmcq + ".timedMcq-component").addClass("timeuplock");
+                $("." + currentimedmcq + ".timeuplock .timedMcq-body-items").addClass("started");
+                $("." + currentimedmcq + ".timeuplock .timedMcq-time-start").addClass("started").prop("disabled", true);
+                 window.setTimeout(function(){
+                    $("." + currentimedmcq + ".timeuplock .timedMcq-item input").addClass("disabled").prop("disabled", true);
+                    $("." + currentimedmcq + ".timeuplock .timedMcq-item label").css("cursor","default").addClass("disabled").prop("disabled", true);
+                    $("." + currentimedmcq + ".timeuplock .buttons-action").addClass("disabled").prop("disabled", true);
+                }, 253);
+                $("." + currentimedmcq + ".timeuplock .timedMcq-time-instruction").addClass("started");
+                $("." + currentimedmcq + ".timeuplock .aria-instruct").removeClass("display-none");
+            }
+
+            //THIS OVERRIDES THE TIMER AS IT HAS BEEN UNENABLED ON THE COMPONENT
+            if (this.model.get('_timeroffEnabled') && this.model.get('_isEnabled')) {
+                $("." + currentimedmcq + ".timedMcq-component").addClass("timeuplock").addClass("notimenabled");
+                $("." + currentimedmcq + ".timeuplock .timedMcq-body-items").addClass("started");
+                $("." + currentimedmcq + ".timeuplock .timedMcq-time-start").addClass("started").prop("disabled", true);
+                $("." + currentimedmcq + ".timeuplock .timedMcq-item label").css("cursor","pointer");
+                $("." + currentimedmcq + ".timeuplock .buttons-action").removeClass("disabled").prop("disabled", false);
+                $("." + currentimedmcq + ".timeuplock .timedMcq-time-instruction").addClass("started");
+                $("." + currentimedmcq + ".timeuplock .aria-instruct").removeClass("display-none");
+            }
+
+            $(".timedMcq-component").addClass("mcqscoringpercent");
+            if (this.model.get('_isSubmitted') && this.model.has('_userAnswer')) {
+                
+                var currentimedmcq = this.model.get('_id');
+                var myarticleis = this.$el.parents('.article');
+                var myarticleId = myarticleis.attr("data-adapt-id");
+                var toshowScore = this.model.get("_feedback")._showmyScore;
+                var percentageBar = this.model.get("_showPercentagebar");
+                var percentBartxt = this.model.get("_showPercenttext");
+                var themcqtotalscore2 = parseFloat($('.' + myarticleId + ' .masterscorehold .mymcqtotalscore').text());
+                var therequiredscore2 = parseFloat($('.' + myarticleId + ' .masterscorehold .mymcqrequiredscore').text());
+                var outofahundred2 = themcqtotalscore2 / therequiredscore2 * 100;
+
+                if (toshowScore == true || percentageBar == true) {
+                    window.setTimeout(function(){
+                        $('.' + myarticleId + ' .mcqscoringaddup.' + currentimedmcq + ' .masterscorehold .mcqmovingbar').css("width", outofahundred2.toFixed(2)+"%").html("&nbsp;<span>" + percentBartxt + "</span> " + outofahundred2.toFixed(2) + "%").attr("aria-label", percentBartxt + outofahundred2.toFixed(2) + "%");
+                        $("." + myarticleId + " .assessmentResults-instruction-inner").html("<p class='yourachievement1' style='font-size: 125%'>Your Overall Score is <span class='leavemyscore'>" + outofahundred2.toFixed(2) + "%</span></p><p class='yourachievement2' style='font-size: 125%'>You selected <span class='leavemyscore'>" + themcqtotalscore2 + "/" + therequiredscore2 + "</span> answers correctly.</p>");
+                     }, 878);
+                }
+            }
+
         },
 
         onKeyPress: function(event) {
@@ -205,6 +437,7 @@ define(function(require) {
         // check if the user is allowed to submit the question
         canSubmit: function() {
             var count = 0;
+            var currentimedmcq = this.model.get('_id');
 
             _.each(this.model.get('_items'), function(item) {
                 if (item._isSelected) {
@@ -212,9 +445,9 @@ define(function(require) {
                 }
             }, this);
 
-            $(".timedMcq-time-start").removeClass('disabled').removeAttr("disabled"); //THIS UNLOCKES OTHER QUESTIONS
-
-            return (count > 0) ? true : false;
+            $(".timedMcq-time-start").removeClass("disabled").prop("disabled", false); //THIS UNLOCKES OTHER QUESTIONS
+         
+            return (count >= 0) ? true : false;
 
         },
 
@@ -273,6 +506,116 @@ define(function(require) {
             return answeredCorrectly;
         },
 
+        _setupLinkedModel: function() {
+            
+            var currentimedmcq = this.model.get('_id');
+            var numberOfCorrectAnswers = this.model.get("_numberOfCorrectAnswers");
+            var numberOfRequiredAnswers = this.model.get("_numberOfRequiredAnswers");
+            var toshowScore = this.model.get("_feedback")._showmyScore;
+            var percentageBar = this.model.get("_showPercentagebar");
+            var percentBartxt = this.model.get("_showPercenttext");
+            var themcqtotalscore = parseFloat(this.model.get("_themcqtotalscore"));
+            var therequiredscore = parseFloat(this.model.get("_therequiredscore"));
+            var mypercentcount = parseFloat($(".mcqscoringpercent").length);
+            var myscorecount = parseFloat($('.mcqscoringaddup').length)+1;
+            var outofahundred = parseFloat(this.model.get("_outofahundred"));
+            var myarticleis = this.$el.parents('.article');
+            var myarticleId = myarticleis.attr("data-adapt-id");
+            
+            if (toshowScore == true || percentageBar == true) {
+                $("." + myarticleId + " .timedMcq-component."+currentimedmcq).addClass("mcqscoringaddup");
+                $('.' + myarticleId + ' .mcqscoringaddup.'+currentimedmcq+' .masterscorehold .mymcqtotalscore').text(numberOfCorrectAnswers);
+                $('.' + myarticleId + ' .mcqscoringaddup .mymcqtotalscore').each(function() {
+                    themcqtotalscore += parseFloat($(this).text());
+                });
+
+                console.log("Total MCQ score is now: " + themcqtotalscore);
+
+                $('.' + myarticleId + ' .mcqscoringaddup.' + currentimedmcq + ' .masterscorehold .mymcqrequiredscore').text(numberOfRequiredAnswers);
+                $('.' + myarticleId + ' .mcqscoringaddup .mymcqrequiredscore').each(function() {
+                    therequiredscore += parseFloat($(this).text());
+                });
+
+                var outofahundred = themcqtotalscore / therequiredscore * 100;
+
+                window.setTimeout(function(){
+                    $('.' + myarticleId + ' .mcqscoringaddup.' + currentimedmcq + ' .masterscorehold .mcqmovingbar').css("width", outofahundred.toFixed(2)+"%").html("&nbsp;<span>" + percentBartxt + "</span> " + outofahundred.toFixed(2) + "%").attr("aria-label", percentBartxt + outofahundred.toFixed(2) + "%");
+                    $("." + myarticleId + " .assessmentResults-instruction-inner").html("<p class='yourachievement1' style='font-size: 125%'>Your Overall Score is <span class='leavemyscore'>" + outofahundred.toFixed(2) + "%</span></p><p class='yourachievement2' style='font-size: 125%'>You selected <span class='leavemyscore'>" + themcqtotalscore + "/" + therequiredscore + "</span> answers correctly.</p>");
+                 }, 777);
+
+                if (myscorecount == mypercentcount) {
+                    this.model.set('_themcqtotalscore', themcqtotalscore);
+                    this.model.set('_therequiredscore', therequiredscore);
+                    this.model.set('_outofahundred', outofahundred);
+                }
+
+                console.log("The Require Total MCQ score is: " + therequiredscore);
+                console.log("Percentage MCQ score is: " + outofahundred.toFixed(2));
+            }
+
+        },
+
+        mycorrectScoring: function() {
+            var numberOfCorrectAnswers = this.model.get("_numberOfCorrectAnswers");
+            var numberOfRequiredAnswers = this.model.get("_numberOfRequiredAnswers");
+            var toshowScore = this.model.get("_feedback")._showmyScore;
+            var rightoScore = this.model.get("_feedback").correct;
+
+            if (toshowScore == true) {
+                this.model.set({
+                    feedbackMessage: rightoScore + "<div class='scoreoutof'><p>You selected <span class='leavemyscore'>" + numberOfCorrectAnswers + "/" + numberOfRequiredAnswers + "</span> answers correctly.</p></div>"
+                });
+            } else {
+                //DO NOTHING
+            }
+
+        },
+        mypartlyScoring: function() {
+            var numberOfCorrectAnswers = this.model.get("_numberOfCorrectAnswers");
+            var numberOfRequiredAnswers = this.model.get("_numberOfRequiredAnswers");
+            var toshowScore = this.model.get("_feedback")._showmyScore;
+            var partlyScore = this.model.get("_feedback")._partlyCorrect.final;
+
+            if (toshowScore == true) {
+                this.model.set({
+                    feedbackMessage: partlyScore + "<div class='scoreoutof'><p>You selected <span class='leavemyscore'>" + numberOfCorrectAnswers + "/" + numberOfRequiredAnswers + "</span> answers correctly.</p></div>"
+                });
+            } else {
+                //DO NOTHING
+            }
+
+        },
+        myincorrectScoring: function() {
+            var numberOfCorrectAnswers = this.model.get("_numberOfCorrectAnswers");
+            var numberOfRequiredAnswers = this.model.get("_numberOfRequiredAnswers");
+            var toshowScore = this.model.get("_feedback")._showmyScore;
+            var wrongoScore = this.model.get("_feedback")._incorrect.final;
+
+            if (toshowScore == true) {
+                this.model.set({
+                    feedbackMessage: wrongoScore + "<div class='scoreoutof'><p>You selected <span class='leavemyscore'>" + numberOfCorrectAnswers + "/" + numberOfRequiredAnswers + "</span> answers correctly.</p></div>"
+                });
+            } else {
+                //DO NOTHING
+            }
+
+        },
+        myindividualScoring: function() {
+            var numberOfCorrectAnswers = this.model.get("_numberOfCorrectAnswers");
+            var numberOfRequiredAnswers = this.model.get("_numberOfRequiredAnswers");
+            var toshowScore = this.model.get("_feedback")._showmyScore;
+            var individualScore = this.model.get('_selectedItems')[0].feedback;
+
+            if (toshowScore == true) {
+                this.model.set({
+                    feedbackMessage: individualScore + "<div class='scoreoutof'><p>You selected <span class='leavemyscore'>" + numberOfCorrectAnswers + "/" + numberOfRequiredAnswers + "</span> answers correctly.</p></div>"
+                });
+            } else {
+                //DO NOTHING
+            }
+
+        },
+
         // Sets the score based upon the questionWeight
         // Can be overwritten if the question needs to set the score in a different way
         setScore: function() {
@@ -285,20 +628,21 @@ define(function(require) {
         setupFeedback: function() {
 
             if (this.model.get('_isCorrect')) {
-                this.setupCorrectFeedback();
+                this.setupCorrectFeedback() + this.mycorrectScoring();
             } else if (this.isPartlyCorrect()) {
-                this.setupPartlyCorrectFeedback();
+                this.setupPartlyCorrectFeedback() + this.mypartlyScoring();
             } 
              else {
                 // apply individual item feedback
                 if((this.model.get('_selectable') === 1) && this.model.get('_selectedItems')[0].feedback) {
-                    this.setupIndividualFeedback(this.model.get('_selectedItems')[0]);
+                    this.setupIndividualFeedback(this.model.get('_selectedItems')[0]) + this.myindividualScoring();
                     return;
                 } else {
-                    this.setupIncorrectFeedback();
+                    this.setupIncorrectFeedback() + this.myincorrectScoring();
                 }
             }
-
+            $(".enabledimgtime .timedMcq-time-start").addClass("disabled").prop("disabled", true);//THIS LOCKES TIMED IMAGE QUESTIONS
+            this._setupLinkedModel();
         },
 
         setupTimeUpFeedback: function() {
@@ -306,6 +650,7 @@ define(function(require) {
                 feedbackTitle: this.model.get('title'),
                 feedbackMessage: this.model.get("_feedback").timeUp
              });
+             $(".enabledimgtime .timedMcq-time-start").addClass("disabled").prop("disabled", true);//THIS LOCKES TIMED IMAGE QUESTIONS
         },
 
         setupIndividualFeedback: function(selectedItem) {
@@ -313,6 +658,7 @@ define(function(require) {
                  feedbackTitle: this.model.get('title'),
                  feedbackMessage: selectedItem.feedback
              });
+             $(".enabledimgtime .timedMcq-time-start").addClass("disabled").prop("disabled", true);//THIS LOCKES TIMED IMAGE QUESTIONS
         },
 
         // This is important and should give the user feedback on how they answered the question

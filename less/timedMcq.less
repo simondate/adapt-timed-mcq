@@ -17,22 +17,75 @@
         &.started {
             visibility: hidden;
             opacity: 0;
+            z-index: 0;
             transition: visibility 0s 0.5s, opacity 0.5s linear;
         }
+    }
+
+    .attemptfr {
+        display:none;
     }
 
     .timedMcq-time {
         position: absolute;
         top: 20px;
-        right: 20px;
+        right: 19px;
         padding: 20px;
+        padding-right: 10px;
+        text-indent: 2px;
         color: @item-text-color;
         background-color: @item-color;
         visibility: hidden;
+        border: 1px solid @white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+        min-width: 30px;
+        text-align: center;
+        &:after {
+            content: "\e624";
+            vertical-align: middle;
+            font-size: 22px;
+            float: left;
+            margin-left: -10px;
+            display: block;
+            margin-top: -2px;
+            font-family: 'vanilla';
+            speak: none;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
         &.started {
             visibility: visible;
             opacity: 1;
+            z-index: 20;
             transition: visibility 0s 0.5s, opacity 0.5s linear;
+        }
+        &.imgcounton {
+            visibility: visible;
+            cursor: default;
+            opacity: 1;
+            z-index: 20;
+            transition: visibility 0s 0.5s, opacity 0.5s linear;
+        }
+        &.stoppedimgtimer {
+            cursor: pointer;
+            visibility: visible;
+            z-index: 20;
+            &:hover {
+                background-color:@item-color-selected;
+            }
+            &:before {
+                content: 'Start\ATimer';
+                display: block;
+                max-width: 60px;
+                text-align: center;
+                margin-bottom: 10px;
+                margin-top: -10px;
+            }
         }
     }
 
@@ -42,6 +95,7 @@
         &.started {
             visibility: visible;
             opacity: 1;
+            z-index: 20;
             transition: visibility 0s 0.5s, opacity 0.5s linear;
         }
     }
@@ -49,22 +103,23 @@
     .timedMcq-time-start {
         position: absolute;
         width: calc(~'100% - 40px');
-        height: 70%;
-        top: 25%;
+        height: calc(~'100% - 40px');
+        top: 20px;
         font-size: 36px;
         z-index: 10;
         visibility: visible;
         opacity: 1;
         transition: opacity 0.5s linear;
 
-        &:before {
-            content: "Reveal timed question";
-        }
-
         &.started {
             visibility: hidden;
             opacity: 0;
+            z-index: 0;
             transition: visibility 0s 0.5s, opacity 0.5s linear;
+        }
+
+        img {
+            opacity: 0 !important;
         }
     }      
 
@@ -175,6 +230,19 @@
     }
 }
 
+.timedMcq-inner {
+    .buttons {
+        visibility: hidden;
+        .buttons-marking-icon {
+            margin-top: inherit;
+        }
+
+        .buttons-display-inner {
+            display: none;
+        }
+    }
+}
+
 .timedMcq-widget {
     visibility: hidden;
     &.show-user-answer {
@@ -224,10 +292,46 @@
             color:@validation-error;
         }
     }
-    
-    .buttons {
-        visibility: hidden;
+
+    &.timed2column {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+
+        .timedMcq-item {
+            width: 48.5%;
+            margin-top: 1%;
+        }
+
     }
+
+    &.timed3column {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+
+        .timedMcq-item {
+            width: 31.3%;
+            margin-top: 1%;
+        }
+
+    }
+
+    &.timed4column {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+
+        .timedMcq-item {
+            width: 24.25%;
+            margin-top: 1%;
+        }
+
+    }
+    
 }
 
 .no-touch {
@@ -262,11 +366,222 @@
 .component-left .timedMcq-time {margin-right: 5%;}
 .component-left .timedMcq-time-start, .component-right .timedMcq-time-start {width: calc(~'95% - 40px') !important;}
 
+/* Below are overrides for when the MCQ time is up so question is locked down */
+.timeuplock {
+    .timedMcq-time-start {
+        display: none !important;
+    }
+    .timedMcq-widget{
+        visibility: visible !important;
+        .timedMcq-item{
+            label{
+                cursor: default;
+            }
+        }
+    }
+    .buttons {
+        visibility: visible !important;
+        .buttons-action {
+            background-color: @disabled-color;
+            border-color: @disabled-color;
+            cursor: default;
+        }
+    }
+}
+.notimenabled {
+    .timedMcq-widget{
+        visibility: visible !important;
+        .timedMcq-item{
+            label{
+                cursor: pointer;
+            }
+        }
+    }
+    .buttons {
+        visibility: visible !important;
+        .buttons-action {
+            background-color: @button-color;
+            border-color: @button-color;
+            cursor: pointer;
+        }
+    }
+}
+
+/* Below are overrides for when the images time is up so question can be visible */
+
+.enabledimgtime {
+    button.timedMcq-time-start.disabled {
+        color: transparent !important;
+    }
+}
+.embedimgtimeup {
+    .timedMcq-inner {
+        min-height: auto !important;
+    }
+    .timedMcq-time-start {
+        display: none !important;
+    }
+    .timedMcq-body-items {
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    .imgcounton {
+        visibility: hidden !important;
+        opacity: 0 !important;
+        cursor: default;
+    }
+    .stoppedimgtimer {
+        visibility: hidden !important;
+        z-index: -1 !important;
+    }
+    .buttons {
+        visibility: visible !important;
+    }
+    .timedMcq-widget .timedMcq-item label{
+        background-color: inherit;
+        border-color: inherit;
+        cursor: pointer;
+    }
+    .timedMcq-widget.complete.submitted .timedMcq-item label{
+        background-color: @disabled-color;
+        border-color: @disabled-color;
+    }
+}
+
+/* Styles for my Score */
+span.leavemyscore {
+    font-size: 200%;
+    font-weight: bold;
+}
+
+/* SCORE MCQ BAR AT BOTTOM STYLES */
+.masterscorehold {display:none;}
+.mcqscoringaddup {
+    .masterscorehold {
+        background-color: darken(@item-color, 20%) !important;
+        border-radius: 0 !important;
+        border: 1px solid @white;
+        height: 20px !important;
+        line-height: 20px;
+        position: relative;
+        display: block;
+        width: calc(~'100% - 2px');
+        margin-top: 10px;
+        overflow: hidden;
+        -webkit-transition: background-color .25s ease-in,color .25s ease-in,border-color .25s ease-in;
+        -moz-transition: background-color .25s ease-in,color .25s ease-in,border-color .25s ease-in;
+        -ms-transition: background-color .25s ease-in,color .25s ease-in,border-color .25s ease-in;
+        transition: background-color .25s ease-in,color .25s ease-in,border-color .25s ease-in;
+    }
+
+    .mcqmovingbar {
+        -webkit-border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
+        -ms-border-radius: 0 !important;
+        -o-border-radius: 0 !important;
+        border-radius: 0 !important;
+        border: 0 solid @item-color !important;
+        border-right: 1px solid rgba(255,255,255,0.5) !important;
+        background-color: @item-color !important;
+        color: @item-text-color;
+        background-repeat: repeat-x !important;
+        background-size: 30px 30px !important;
+        width: 0%;
+        min-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        -webkit-animation: progress 1.5s linear infinite !important;
+        -moz-animation: progress 1.5s linear infinite !important;
+        animation: progress 1.5s linear infinite !important;
+        -webkit-transition: width 1s ease-out !important;
+        -moz-transition: width 1s ease-out !important;
+        -ms-transition: width 1s ease-out !important;
+        -o-transition: width 1s ease-out !important;
+        transition: width 1s ease-out !important;
+    }
+}
+.component-left.mcqscoringaddup .masterscorehold {
+    width: calc(~'100% - 32px');
+}
+.component-right.mcqscoringaddup .masterscorehold {
+    width: calc(~'100% - 32px');
+    margin-left: 30px;
+}
+
 @media all and (max-width:@device-width-medium){
+    .timedMcq-widget {
+        &.timed2column {
+            .timedMcq-item {
+                width: 48.5%;
+            }
+
+        }
+
+        &.timed3column {
+            .timedMcq-item {
+                width: 48.5%;
+            }
+
+        }
+
+        &.timed4column {
+            .timedMcq-item {
+                width: 48.5%;
+            }
+
+        }
+    }
     .component-left .timedMcq-time-start, .component-right .timedMcq-time-start {
        width: calc(~'100% - 40px') !important;
         right: 0;
         left: 20px;
     }
     .component-left .timedMcq-time {margin-right: 0%;}
+    .mcqscoringaddup .mcqmovingbar span {display:none !important;}
+    .component-left.mcqscoringaddup .masterscorehold, .component-right.mcqscoringaddup .masterscorehold {width: calc(~'100% - 2px');margin-left: 0px;}
+}
+
+@media all and (max-width:@device-width-small){
+    .timedMcq-widget {
+        &.timed2column {
+            display: inherit;
+            flex-wrap: inherit;
+            justify-content: inherit;
+            align-items: inherit;
+            .timedMcq-item {
+                width: inherit;
+                margin-top: inherit;
+            }
+
+        }
+
+        &.timed3column {
+            display: inherit;
+            flex-wrap: inherit;
+            justify-content: inherit;
+            align-items: inherit;
+            .timedMcq-item {
+                width: inherit;
+                margin-top: inherit;
+            }
+
+        }
+
+        &.timed4column {
+            display: inherit;
+            flex-wrap: inherit;
+            justify-content: inherit;
+            align-items: inherit;
+            .timedMcq-item {
+                width: inherit;
+                margin-top: inherit;
+            }
+
+        }
+    }
 }
